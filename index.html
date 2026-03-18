@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PKour — L'app per il Parkour</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #126869;
+    --accent-bright: #1a9a9c;
+    --accent-dim: #0d4f50;
+    --bg: #080c0c;
+    --bg2: #0d1515;
+    --bg3: #111e1e;
+    --text: #e8f0f0;
+    --text-dim: #7a9999;
+    --text-muted: #3d5555;
+    --border: rgba(18,104,105,0.2);
+    --glow: rgba(18,104,105,0.4);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999; opacity: 0.6;
+  }
+
+  /* LANG BTN */
+  .lang-btn {
+    background: transparent; border: 1px solid var(--border);
+    color: var(--text-dim); padding: 6px 14px; border-radius: 6px;
+    font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .lang-btn:hover { border-color: var(--accent-bright); color: var(--accent-bright); background: rgba(18,104,105,0.08); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 20px 40px; display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(8,12,12,0.95), transparent);
+    backdrop-filter: blur(8px);
+  }
+  .nav-left { display: flex; align-items: center; gap: 12px; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .logo-icon-placeholder {
+    width: 40px; height: 40px; background: var(--accent); border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif; font-size: 20px; color: white; letter-spacing: 1px; flex-shrink: 0;
+  }
+  .logo-wordmark-placeholder { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 3px; color: var(--text); }
+  .nav-cta {
+    background: var(--accent); color: white; padding: 10px 24px; border-radius: 8px;
+    font-weight: 600; font-size: 14px; text-decoration: none; letter-spacing: 0.5px;
+    transition: all 0.2s; border: none; cursor: pointer;
+  }
+  .nav-cta:hover { background: var(--accent-bright); transform: translateY(-1px); box-shadow: 0 8px 24px var(--glow); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; gap: 60px; padding: 140px 80px 80px; position: relative; overflow: hidden;
+  }
+  .hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(18,104,105,0.15) 0%, transparent 70%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; bottom: -100px; left: 20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(18,104,105,0.08) 0%, transparent 70%); pointer-events: none; }
+  .hero-eyebrow { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--accent-bright); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+  .hero-eyebrow::before { content: ''; width: 30px; height: 1px; background: var(--accent-bright); }
+  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 7vw, 96px); line-height: 0.95; letter-spacing: 2px; margin-bottom: 24px; }
+  .hero-title .accent-line { color: var(--accent-bright); display: block; }
+  .hero-desc { font-size: 17px; line-height: 1.7; color: var(--text-dim); max-width: 480px; margin-bottom: 40px; }
+  .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .btn-primary { background: var(--accent); color: white; padding: 16px 36px; border-radius: 10px; font-weight: 600; font-size: 16px; text-decoration: none; transition: all 0.25s; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-primary:hover { background: var(--accent-bright); transform: translateY(-2px); box-shadow: 0 12px 32px var(--glow); }
+  .btn-ghost { color: var(--text-dim); padding: 16px 24px; font-size: 15px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: color 0.2s; }
+  .btn-ghost:hover { color: var(--text); }
+  .hero-stats { display: flex; gap: 32px; margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+  .stat-item { text-align: left; }
+  .stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: var(--accent-bright); letter-spacing: 1px; display: block; }
+  .stat-label { font-size: 12px; color: var(--text-dim); letter-spacing: 1px; text-transform: uppercase; }
+
+  /* PHONE */
+  .hero-phone { display: flex; justify-content: center; align-items: center; position: relative; }
+  .phone-wrapper { position: relative; animation: float 6s ease-in-out infinite; }
+  @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-16px); } }
+  .phone-glow { position: absolute; inset: -40px; background: radial-gradient(ellipse, rgba(18,104,105,0.25) 0%, transparent 70%); pointer-events: none; filter: blur(20px); }
+  .phone-frame { width: 280px; background: #0a1414; border-radius: 44px; border: 2px solid rgba(18,104,105,0.5); overflow: hidden; box-shadow: 0 0 0 1px rgba(255,255,255,0.03), 0 40px 80px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.06); position: relative; }
+  .phone-notch { width: 100px; height: 28px; background: #0a1414; border-radius: 0 0 20px 20px; margin: 0 auto; position: relative; z-index: 2; border: 1px solid rgba(18,104,105,0.3); border-top: none; }
+  .phone-screen { background: #0d1919; min-height: 560px; position: relative; overflow: hidden; }
+  .screen-map { width: 100%; height: 100%; position: relative; background: #0d1919; }
+  .map-grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(18,104,105,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(18,104,105,0.07) 1px, transparent 1px); background-size: 20px 20px; }
+  .map-roads { position: absolute; inset: 0; overflow: hidden; }
+  .road { position: absolute; background: rgba(18,104,105,0.2); border-radius: 2px; }
+  .map-pin { position: absolute; width: 36px; height: 36px; background: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; box-shadow: 0 0 16px var(--glow); border: 2px solid rgba(255,255,255,0.2); cursor: pointer; transition: transform 0.2s; }
+  .map-pin:hover { transform: scale(1.1); }
+  .map-pin.current { background: transparent; border: 3px solid var(--accent-bright); box-shadow: 0 0 0 6px rgba(18,104,105,0.2), 0 0 20px var(--glow); }
+  .map-pin.current::after { content: ''; width: 10px; height: 10px; background: var(--accent-bright); border-radius: 50%; }
+  .map-status-bar { position: absolute; top: 0; left: 0; right: 0; height: 36px; background: rgba(8,12,12,0.9); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text-dim); z-index: 10; }
+  .map-label { position: absolute; bottom: 80px; left: 16px; right: 16px; background: rgba(8,12,12,0.9); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; backdrop-filter: blur(8px); z-index: 10; }
+  .map-label-title { font-weight: 600; font-size: 13px; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+  .map-label-sub { font-size: 11px; color: var(--text-dim); }
+  .map-fab { position: absolute; bottom: 24px; right: 16px; width: 44px; height: 44px; background: var(--accent); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; box-shadow: 0 4px 16px var(--glow); z-index: 10; cursor: pointer; }
+  .map-bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background: rgba(8,12,12,0.95); border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-around; z-index: 10; padding-bottom: 4px; }
+  .nav-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 18px; color: var(--text-dim); transition: all 0.2s; }
+  .nav-icon.active { color: var(--accent-bright); background: rgba(18,104,105,0.15); }
+
+  /* SECTIONS */
+  section { padding: 100px 80px; }
+  .section-eyebrow { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--accent-bright); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+  .section-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--accent-bright); }
+  .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 5vw, 64px); letter-spacing: 2px; line-height: 1; margin-bottom: 16px; }
+  .section-sub { font-size: 16px; color: var(--text-dim); line-height: 1.7; max-width: 560px; margin-bottom: 60px; }
+
+  /* FEATURES */
+  .features-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+  .feature-card { background: var(--bg2); padding: 40px 36px; position: relative; transition: background 0.3s; cursor: default; }
+  .feature-card:hover { background: var(--bg3); }
+  .feature-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0; transition: opacity 0.3s; }
+  .feature-card:hover::before { opacity: 1; }
+  .feature-icon { width: 52px; height: 52px; background: rgba(18,104,105,0.15); border: 1px solid rgba(18,104,105,0.3); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 24px; }
+  .feature-num { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 10px; }
+  .feature-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1px; margin-bottom: 12px; color: var(--text); }
+  .feature-desc { font-size: 14px; line-height: 1.7; color: var(--text-dim); }
+
+  /* SCREENSHOTS */
+  .screenshots-section { overflow: hidden; }
+  .screenshots-track { display: flex; gap: 24px; margin-top: 48px; padding-bottom: 24px; }
+  .screenshot-phone { flex-shrink: 0; width: 220px; background: #0a1414; border-radius: 36px; border: 2px solid var(--border); overflow: hidden; box-shadow: 0 24px 60px rgba(0,0,0,0.6); transition: transform 0.3s, box-shadow 0.3s; }
+  .screenshot-phone:hover { transform: translateY(-8px); box-shadow: 0 40px 80px rgba(0,0,0,0.8), 0 0 40px var(--glow); border-color: rgba(18,104,105,0.6); }
+  .screenshot-phone:nth-child(even) { margin-top: 40px; }
+  .phone-screen-inner { min-height: 440px; background: #0d1919; padding: 10px; position: relative; overflow: hidden; }
+  .screen-enc { background: var(--bg); }
+  .enc-header { background: var(--bg2); border-radius: 12px; padding: 12px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+  .enc-header-title { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 1px; }
+  .search-bar { background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; display: flex; align-items: center; gap: 6px; margin-bottom: 12px; }
+  .search-bar-text { font-size: 11px; color: var(--text-muted); }
+  .trick-item { background: var(--bg2); border-radius: 10px; padding: 12px; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; border: 1px solid transparent; transition: border-color 0.2s; }
+  .trick-thumb { width: 40px; height: 40px; background: rgba(18,104,105,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .trick-info { flex: 1; }
+  .trick-name { font-size: 12px; font-weight: 600; margin-bottom: 3px; }
+  .trick-level { font-size: 10px; color: var(--text-dim); }
+  .trick-badge { font-size: 10px; padding: 3px 8px; border-radius: 20px; font-family: 'Space Mono', monospace; }
+  .badge-done { background: rgba(18,104,105,0.2); color: var(--accent-bright); }
+  .badge-learning { background: rgba(255,165,0,0.15); color: #ffa500; }
+  .badge-todo { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+  .screen-ai { background: var(--bg); }
+  .ai-header { background: linear-gradient(135deg, rgba(18,104,105,0.3), rgba(18,104,105,0.1)); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 10px; text-align: center; }
+  .ai-logo-mini { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent-bright); letter-spacing: 3px; margin-bottom: 8px; }
+  .ai-headline { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; }
+  .ai-bubble { background: var(--bg2); border-radius: 12px 12px 12px 4px; padding: 12px; margin-bottom: 8px; border: 1px solid var(--border); }
+  .ai-bubble-user { background: rgba(18,104,105,0.2); border-radius: 12px 12px 4px 12px; border-color: rgba(18,104,105,0.3); margin-left: 20px; }
+  .ai-bubble-text { font-size: 11px; line-height: 1.5; color: var(--text-dim); }
+  .ai-challenge-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; margin-top: 8px; }
+  .ai-challenge-title { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; margin-bottom: 6px; color: var(--accent-bright); }
+  .challenge-steps { list-style: none; }
+  .challenge-steps li { font-size: 10px; color: var(--text-dim); padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.03); display: flex; align-items: center; gap: 6px; }
+  .challenge-steps li::before { content: '→'; color: var(--accent-bright); font-size: 10px; }
+  .screen-profile { background: var(--bg); }
+  .profile-hero-area { background: linear-gradient(180deg, rgba(18,104,105,0.2) 0%, transparent 100%); border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 10px; }
+  .profile-avatar { width: 60px; height: 60px; background: var(--accent); border-radius: 50%; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 26px; border: 3px solid rgba(255,255,255,0.1); }
+  .profile-name { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; }
+  .profile-bio { font-size: 10px; color: var(--text-dim); margin-top: 4px; }
+  .profile-stats-row { display: flex; justify-content: space-around; margin-top: 14px; }
+  .pstat { text-align: center; }
+  .pstat-num { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent-bright); display: block; }
+  .pstat-label { font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
+  .progress-section { margin-top: 8px; }
+  .progress-label { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .progress-bar-bg { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; margin-bottom: 8px; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-bright)); border-radius: 3px; }
+
+  /* HOW */
+  .how-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .steps-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; position: relative; }
+  .steps-row::before { content: ''; position: absolute; top: 28px; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+  .step { text-align: center; position: relative; }
+  .step-num { width: 56px; height: 56px; background: var(--bg3); border: 2px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent-bright); margin: 0 auto 24px; position: relative; z-index: 1; box-shadow: 0 0 24px rgba(18,104,105,0.3); }
+  .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; margin-bottom: 10px; }
+  .step-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+
+  /* CTA */
+  .cta-section { text-align: center; position: relative; overflow: hidden; }
+  .cta-section::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 600px; height: 600px; background: radial-gradient(circle, rgba(18,104,105,0.12) 0%, transparent 70%); pointer-events: none; }
+  .cta-big-text { font-family: 'Bebas Neue', sans-serif; font-size: clamp(60px, 10vw, 140px); letter-spacing: 4px; line-height: 0.9; opacity: 0.04; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); white-space: nowrap; pointer-events: none; color: var(--text); }
+  .cta-content { position: relative; z-index: 1; }
+  .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 80px); letter-spacing: 3px; margin-bottom: 20px; }
+  .cta-sub { font-size: 17px; color: var(--text-dim); max-width: 480px; margin: 0 auto 40px; line-height: 1.7; }
+  .logo-placeholder-cta { width: 80px; height: 80px; background: var(--accent); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: white; margin: 0 auto 32px; box-shadow: 0 16px 48px var(--glow); }
+
+  /* FORM */
+  .email-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 520px; margin: 0 auto; }
+  .email-input { flex: 1; min-width: 220px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: border-color 0.2s; }
+  .email-input:focus { border-color: var(--accent-bright); }
+  .email-input::placeholder { color: var(--text-muted); }
+  .form-msg { margin-top: 14px; font-size: 13px; min-height: 20px; text-align: center; transition: all 0.3s; }
+  .form-msg.success { color: var(--accent-bright); }
+  .form-msg.error { color: #e05555; }
+  .form-msg.info { color: var(--text-dim); }
+
+  /* FOOTER */
+  footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 40px 80px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .footer-left { display: flex; align-items: center; gap: 12px; }
+  .footer-logo-placeholder { width: 32px; height: 32px; background: var(--accent); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: white; }
+  .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 2px; }
+  .footer-copy { font-size: 13px; color: var(--text-muted); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-up { animation: fadeUp 0.8s ease forwards; }
+  .delay-1 { animation-delay: 0.1s; opacity: 0; }
+  .delay-2 { animation-delay: 0.2s; opacity: 0; }
+  .delay-3 { animation-delay: 0.3s; opacity: 0; }
+  .delay-4 { animation-delay: 0.4s; opacity: 0; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; text-align: center; }
+    .hero-eyebrow, .hero-stats { justify-content: center; }
+    .hero-actions { justify-content: center; }
+    .hero-phone { margin-top: 40px; }
+    .hero-desc { margin: 0 auto 40px; }
+    section { padding: 60px 24px; }
+    .steps-row { grid-template-columns: 1fr; gap: 32px; }
+    .steps-row::before { display: none; }
+    nav { padding: 16px 24px; }
+    footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <div class="logo-icon-placeholder">P</div><!-- PLACEHOLDER: <img src="logo-icon.png" width="40"> -->
+    <span class="logo-wordmark-placeholder">PKour</span><!-- PLACEHOLDER: <img src="logo-wordmark.png" height="28"> -->
+  </div>
+  <div class="nav-right">
+    <button class="lang-btn" id="langToggle" onclick="toggleLang()">EN</button>
+    <a href="#download" class="nav-cta" data-i18n="nav_cta">Scarica l'app</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow animate-up delay-1" data-i18n="hero_eyebrow">Il tuo compagno di allenamento</div>
+    <h1 class="hero-title animate-up delay-2">
+      <span data-i18n="hero_t1">TUTTO IL</span><br>
+      <span data-i18n="hero_t2">PARKOUR</span><br>
+      <span class="accent-line" data-i18n="hero_t3">IN UN'APP</span>
+    </h1>
+    <p class="hero-desc animate-up delay-3" data-i18n="hero_desc">Mappa gli spot, studia i movimenti, traccia i tuoi progressi e lascia che l'AI ti guidi verso il prossimo livello. PKour è l'app definitiva per la community del parkour e freerunning.</p>
+    <div class="hero-actions animate-up delay-4">
+      <a href="#download" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-i18n="hero_cta">Download Gratis</span>
+      </a>
+      <a href="#features" class="btn-ghost"><span data-i18n="hero_cta2">Scopri le feature</span> →</a>
+    </div>
+    <div class="hero-stats animate-up delay-4">
+      <div class="stat-item"><span class="stat-num">200+</span><span class="stat-label" data-i18n="s_tricks">Tricks</span></div>
+      <div class="stat-item"><span class="stat-num">∞</span><span class="stat-label" data-i18n="s_spots">Spot</span></div>
+      <div class="stat-item"><span class="stat-num">AI</span><span class="stat-label" data-i18n="s_coach">Coach</span></div>
+    </div>
+  </div>
+  <div class="hero-phone">
+    <div class="phone-wrapper">
+      <div class="phone-glow"></div>
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="screen-map">
+            <div class="map-grid"></div>
+            <div class="map-roads">
+              <div class="road" style="width:2px;height:100%;left:40%;top:0;opacity:0.5"></div>
+              <div class="road" style="width:2px;height:60%;left:55%;top:20%;transform:rotate(15deg);"></div>
+              <div class="road" style="height:2px;width:80%;left:10%;top:35%;"></div>
+              <div class="road" style="height:2px;width:60%;left:20%;top:55%;"></div>
+              <div class="road" style="width:2px;height:40%;left:25%;top:30%;transform:rotate(-8deg);opacity:0.3"></div>
+            </div>
+            <div class="map-status-bar"><span>9:10</span><span>📍 Torino</span></div>
+            <div class="map-pin" style="top:36%;left:18%;font-size:14px;">🧱</div>
+            <div class="map-pin" style="top:62%;left:58%;font-size:14px;">🧱</div>
+            <div class="map-pin current" style="top:57%;left:34%;"></div>
+            <div class="map-label">
+              <div class="map-label-title"><span style="color:var(--accent-bright);">●</span><span data-i18n="map_near">Spot Vicino a Te</span></div>
+              <div class="map-label-sub" data-i18n="map_sub">2 spot nelle vicinanze · Torino</div>
+            </div>
+            <div class="map-fab">＋</div>
+            <div class="map-bottom-nav">
+              <div class="nav-icon">🏠</div><div class="nav-icon">📚</div>
+              <div class="nav-icon">✨</div><div class="nav-icon active">🗺️</div>
+              <div class="nav-icon">👤</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features-section" id="features">
+  <div class="section-eyebrow" data-i18n="feat_eye">Feature</div>
+  <h2 class="section-title" data-i18n="feat_title">Ogni strumento<br>che ti serve</h2>
+  <p class="section-sub" data-i18n="feat_sub">Da atleta principiante a traceur esperto, PKour cresce con te.</p>
+  <div class="features-grid">
+    <div class="feature-card"><div class="feature-num">01</div><div class="feature-icon">🗺️</div><div class="feature-title" data-i18n="f1t">Mappa Spot</div><p class="feature-desc" data-i18n="f1d">Esplora spot reali su mappa interattiva. Aggiungi nuovi spot, vota qualità e sicurezza, segnala problemi. Trova sempre dove allenarsi vicino a te.</p></div>
+    <div class="feature-card"><div class="feature-num">02</div><div class="feature-icon">📚</div><div class="feature-title" data-i18n="f2t">Enciclopedia Tricks</div><p class="feature-desc" data-i18n="f2d">Lista completa di movimenti con prerequisiti, video tutorial e descrizioni dettagliate. Segna cosa sai fare, cosa stai imparando e cosa hai ancora da scoprire.</p></div>
+    <div class="feature-card"><div class="feature-num">03</div><div class="feature-icon">🎥</div><div class="feature-title" data-i18n="f3t">Progress Tracker</div><p class="feature-desc" data-i18n="f3d">Registra i tuoi tentativi con video locali. Guarda la tua crescita tecnica nel tempo e mantieni la motivazione con una timeline visiva dei progressi.</p></div>
+    <div class="feature-card"><div class="feature-num">04</div><div class="feature-icon">🤖</div><div class="feature-title" data-i18n="f4t">AI Coach</div><p class="feature-desc" data-i18n="f4d">Genera lines e challenge personalizzate basate sui trick che già conosci. Descrivi lo spot, l'AI costruisce una sequenza su misura per te.</p></div>
+    <div class="feature-card"><div class="feature-num">05</div><div class="feature-icon">⚡</div><div class="feature-title" data-i18n="f5t">Challenge & Sfide</div><p class="feature-desc" data-i18n="f5d">Modalità sfida con amici o solo. Trick random da imparare filtrati per livello. Mantieni alta l'intensità degli allenamenti con obiettivi concreti.</p></div>
+    <div class="feature-card"><div class="feature-num">06</div><div class="feature-icon">👤</div><div class="feature-title" data-i18n="f6t">Profilo Atleta</div><p class="feature-desc" data-i18n="f6d">Il tuo profilo con statistiche complete: trick completati, spot visitati, rating community. Mostra i tuoi progressi e connettiti con altri atleti.</p></div>
+  </div>
+</section>
+
+<section class="screenshots-section">
+  <div class="section-eyebrow" data-i18n="ss_eye">App in azione</div>
+  <h2 class="section-title" data-i18n="ss_title">Progettata per<br>l'atleta moderno</h2>
+  <p class="section-sub" data-i18n="ss_sub">Un'interfaccia pensata per essere usata sul campo, sotto al sole, con le mani sporche.</p>
+  <div class="screenshots-track">
+    <div class="screenshot-phone">
+      <div class="phone-screen-inner screen-enc">
+        <div class="enc-header"><span class="enc-header-title" data-i18n="sc1t">Enciclopedia</span><span style="font-size:18px;">🔍</span></div>
+        <div class="search-bar"><span style="font-size:12px;color:var(--accent-bright);">🔍</span><span class="search-bar-text" data-i18n="sc1s">Cerca un trick…</span></div>
+        <div class="trick-item"><div class="trick-thumb">🏃</div><div class="trick-info"><div class="trick-name">Precision Jump</div><div class="trick-level" data-i18n="lb1">Base · Salti</div></div><span class="trick-badge badge-done" data-i18n="bd1">✓ Fatto</span></div>
+        <div class="trick-item"><div class="trick-thumb">🌀</div><div class="trick-info"><div class="trick-name">Kong Vault</div><div class="trick-level" data-i18n="lb2">Intermedio · Vault</div></div><span class="trick-badge badge-learning" data-i18n="bw1">In corso</span></div>
+        <div class="trick-item"><div class="trick-thumb">🔥</div><div class="trick-info"><div class="trick-name">Webster</div><div class="trick-level" data-i18n="lb3">Avanzato · Flip</div></div><span class="trick-badge badge-todo" data-i18n="bt1">Da fare</span></div>
+        <div class="trick-item"><div class="trick-thumb">💪</div><div class="trick-info"><div class="trick-name">Cat Leap</div><div class="trick-level" data-i18n="lb4">Base · Arrampicata</div></div><span class="trick-badge badge-done" data-i18n="bd2">✓ Fatto</span></div>
+        <div class="trick-item"><div class="trick-thumb">⚡</div><div class="trick-info"><div class="trick-name">Speed Vault</div><div class="trick-level" data-i18n="lb5">Base · Vault</div></div><span class="trick-badge badge-done" data-i18n="bd3">✓ Fatto</span></div>
+      </div>
+    </div>
+    <div class="screenshot-phone">
+      <div class="phone-screen-inner screen-ai">
+        <div class="ai-header"><div class="ai-logo-mini">AI COACH</div><div class="ai-headline" data-i18n="ai_hl">Genera la tua Line</div></div>
+        <div class="ai-bubble"><div class="ai-bubble-text" data-i18n="ai_m1">Dimmi come è fatto il tuo spot e ti genero una line personalizzata sui trick che sai fare!</div></div>
+        <div class="ai-bubble ai-bubble-user"><div class="ai-bubble-text" data-i18n="ai_m2">2 muretti alti 60cm, una ringhiera, prato largo per flippare</div></div>
+        <div class="ai-challenge-card">
+          <div class="ai-challenge-title" data-i18n="ai_gen">⚡ Line Generata</div>
+          <ul class="challenge-steps">
+            <li data-i18n="ai_s1">Speed Vault sul primo muretto</li>
+            <li data-i18n="ai_s2">Precision sul secondo</li>
+            <li data-i18n="ai_s3">Kong dalla ringhiera</li>
+            <li data-i18n="ai_s4">Webster sul prato finale</li>
+          </ul>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:6px;">
+          <button style="flex:1;background:var(--accent);color:white;border:none;border-radius:8px;padding:10px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;" data-i18n="ai_save">✓ Salva</button>
+          <button style="flex:1;background:var(--bg2);color:var(--text-dim);border:1px solid var(--border);border-radius:8px;padding:10px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;" data-i18n="ai_regen">↺ Rigenera</button>
+        </div>
+      </div>
+    </div>
+    <div class="screenshot-phone">
+      <div class="phone-screen-inner screen-profile">
+        <div class="profile-hero-area">
+          <div class="profile-avatar">🏃</div>
+          <div class="profile-name">Marco R.</div>
+          <div class="profile-bio" data-i18n="pr_bio">Traceur da 4 anni · Torino</div>
+          <div class="profile-stats-row">
+            <div class="pstat"><span class="pstat-num">28</span><span class="pstat-label" data-i18n="s_tricks">Tricks</span></div>
+            <div class="pstat"><span class="pstat-num">14</span><span class="pstat-label" data-i18n="s_spots">Spot</span></div>
+            <div class="pstat"><span class="pstat-num">4.8</span><span class="pstat-label">Rating</span></div>
+          </div>
+        </div>
+        <div class="progress-section" style="padding:0 4px;">
+          <div class="progress-label"><span data-i18n="pr_ov">Progressi Generali</span><span style="color:var(--accent-bright);">28/80</span></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:35%"></div></div>
+          <div class="progress-label"><span>Vault</span><span style="color:var(--accent-bright);">8/12</span></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:66%"></div></div>
+          <div class="progress-label"><span data-i18n="pr_fl">Flip & Tricking</span><span style="color:var(--accent-bright);">4/20</span></div>
+          <div class="progress-bar-bg"><div class="progress-bar-fill" style="width:20%"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="screenshot-phone">
+      <div class="phone-screen-inner" style="background:var(--bg);padding:10px;">
+        <div style="background:var(--bg2);border-radius:12px;overflow:hidden;margin-bottom:8px;height:160px;position:relative;">
+          <div class="map-grid" style="opacity:0.5;position:absolute;inset:0;"></div>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);"><div class="map-pin" style="position:static;margin:auto;">🧱</div></div>
+          <div style="position:absolute;bottom:8px;left:8px;background:rgba(8,12,12,0.9);padding:4px 10px;border-radius:6px;font-size:10px;color:var(--text-dim);">Torino Nord</div>
+        </div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;margin-bottom:6px;" data-i18n="sp_name">Muro Via Garibaldi</div>
+        <div style="font-size:11px;color:var(--text-dim);margin-bottom:12px;">📍 Torino, TO · 1.2 km</div>
+        <div style="display:flex;gap:6px;margin-bottom:12px;">
+          <span style="background:rgba(18,104,105,0.2);color:var(--accent-bright);font-size:10px;padding:4px 10px;border-radius:20px;">⭐ 4.5</span>
+          <span style="background:rgba(255,255,255,0.05);color:var(--text-dim);font-size:10px;padding:4px 10px;border-radius:20px;" data-i18n="sp_safe">🛡️ Sicuro</span>
+          <span style="background:rgba(255,255,255,0.05);color:var(--text-dim);font-size:10px;padding:4px 10px;border-radius:20px;">📸 8</span>
+        </div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.6;margin-bottom:12px;" data-i18n="sp_desc">Muretto lungo circa 3m, ottimo per precision e speed vault. Pavimento in cemento buono.</div>
+        <button style="width:100%;background:var(--accent);color:white;border:none;border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;" data-i18n="sp_vis">✓ Segna come Visitato</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how-section">
+  <div class="section-eyebrow" data-i18n="how_eye">Come funziona</div>
+  <h2 class="section-title" data-i18n="how_title">Tre passi per<br>iniziare</h2>
+  <div class="steps-row" style="margin-top:60px;">
+    <div class="step"><div class="step-num">1</div><div class="step-title" data-i18n="st1t">Scarica e crea il profilo</div><p class="step-desc" data-i18n="st1d">Registrati, inserisci il tuo livello e seleziona i trick che già conosci. PKour impara da te.</p></div>
+    <div class="step"><div class="step-num">2</div><div class="step-title" data-i18n="st2t">Esplora l'enciclopedia</div><p class="step-desc" data-i18n="st2d">Sfoglia centinaia di movimenti, guarda i tutorial, impara i prerequisiti e traccia i tuoi progressi con video personali.</p></div>
+    <div class="step"><div class="step-num">3</div><div class="step-title" data-i18n="st3t">Vai allo spot</div><p class="step-desc" data-i18n="st3d">Trova spot vicini, genera una line con l'AI e allenati. Poi segnala, vota e aggiungi nuovi spot per la community.</p></div>
+  </div>
+</section>
+
+<section class="cta-section" id="download">
+  <div class="cta-big-text">PKOUR</div>
+  <div class="cta-content">
+    <div class="logo-placeholder-cta">P</div><!-- PLACEHOLDER: <img src="logo-icon-color.png" width="80"> -->
+    <h2 class="cta-title" data-i18n="cta_title">Pronto a salire<br>di livello?</h2>
+    <p class="cta-sub" data-i18n="cta_sub">PKour è in sviluppo. Lascia la tua email per essere il primo a provarlo quando uscirà.</p>
+    <div class="email-form">
+      <input type="email" id="emailInput" class="email-input" placeholder="la-tua@email.com" data-i18n-ph="ep">
+      <button class="btn-primary" id="submitBtn" onclick="submitEmail()">
+        <span data-i18n="cta_btn">Avvisami</span>
+      </button>
+    </div>
+    <p class="form-msg info" id="formMsg" data-i18n="form_note">Niente spam. Solo la notifica quando PKour è live.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo-placeholder">P</div><!-- PLACEHOLDER: <img src="logo-icon-white.png" width="32"> -->
+    <span class="footer-brand">PKour</span>
+  </div>
+  <span class="footer-copy" data-i18n="footer">© 2026 PKour. Fatto con 🤸 a Torino.</span>
+</footer>
+
+<script>
+// ─── Translations ─────────────────────────────────────────────────────────
+const T = {
+  it: {
+    nav_cta:"Scarica l'app", hero_eyebrow:"Il tuo compagno di allenamento",
+    hero_t1:"TUTTO IL", hero_t2:"PARKOUR", hero_t3:"IN UN'APP",
+    hero_desc:"Mappa gli spot, studia i movimenti, traccia i tuoi progressi e lascia che l'AI ti guidi verso il prossimo livello. PKour è l'app definitiva per la community del parkour e freerunning.",
+    hero_cta:"Download Gratis", hero_cta2:"Scopri le feature",
+    s_tricks:"Tricks", s_spots:"Spot", s_coach:"Coach",
+    map_near:"Spot Vicino a Te", map_sub:"2 spot nelle vicinanze · Torino",
+    feat_eye:"Feature", feat_title:"Ogni strumento<br>che ti serve", feat_sub:"Da atleta principiante a traceur esperto, PKour cresce con te.",
+    f1t:"Mappa Spot", f1d:"Esplora spot reali su mappa interattiva. Aggiungi nuovi spot, vota qualità e sicurezza, segnala problemi. Trova sempre dove allenarsi vicino a te.",
+    f2t:"Enciclopedia Tricks", f2d:"Lista completa di movimenti con prerequisiti, video tutorial e descrizioni dettagliate. Segna cosa sai fare, cosa stai imparando e cosa hai ancora da scoprire.",
+    f3t:"Progress Tracker", f3d:"Registra i tuoi tentativi con video locali. Guarda la tua crescita tecnica nel tempo e mantieni la motivazione con una timeline visiva dei progressi.",
+    f4t:"AI Coach", f4d:"Genera lines e challenge personalizzate basate sui trick che già conosci. Descrivi lo spot, l'AI costruisce una sequenza su misura per te.",
+    f5t:"Challenge & Sfide", f5d:"Modalità sfida con amici o solo. Trick random da imparare filtrati per livello. Mantieni alta l'intensità degli allenamenti con obiettivi concreti.",
+    f6t:"Profilo Atleta", f6d:"Il tuo profilo con statistiche complete: trick completati, spot visitati, rating community. Mostra i tuoi progressi e connettiti con altri atleti.",
+    ss_eye:"App in azione", ss_title:"Progettata per<br>l'atleta moderno", ss_sub:"Un'interfaccia pensata per essere usata sul campo, sotto al sole, con le mani sporche.",
+    sc1t:"Enciclopedia", sc1s:"Cerca un trick…",
+    lb1:"Base · Salti", lb2:"Intermedio · Vault", lb3:"Avanzato · Flip", lb4:"Base · Arrampicata", lb5:"Base · Vault",
+    bd1:"✓ Fatto", bd2:"✓ Fatto", bd3:"✓ Fatto", bw1:"In corso", bt1:"Da fare",
+    ai_hl:"Genera la tua Line",
+    ai_m1:"Dimmi come è fatto il tuo spot e ti genero una line personalizzata sui trick che sai fare!",
+    ai_m2:"2 muretti alti 60cm, una ringhiera, prato largo per flippare",
+    ai_gen:"⚡ Line Generata", ai_s1:"Speed Vault sul primo muretto", ai_s2:"Precision sul secondo", ai_s3:"Kong dalla ringhiera", ai_s4:"Webster sul prato finale",
+    ai_save:"✓ Salva", ai_regen:"↺ Rigenera",
+    pr_bio:"Traceur da 4 anni · Torino", pr_ov:"Progressi Generali", pr_fl:"Flip & Tricking",
+    sp_name:"Muro Via Garibaldi", sp_safe:"🛡️ Sicuro", sp_desc:"Muretto lungo circa 3m, ottimo per precision e speed vault. Pavimento in cemento buono.", sp_vis:"✓ Segna come Visitato",
+    how_eye:"Come funziona", how_title:"Tre passi per<br>iniziare",
+    st1t:"Scarica e crea il profilo", st1d:"Registrati, inserisci il tuo livello e seleziona i trick che già conosci. PKour impara da te.",
+    st2t:"Esplora l'enciclopedia", st2d:"Sfoglia centinaia di movimenti, guarda i tutorial, impara i prerequisiti e traccia i tuoi progressi con video personali.",
+    st3t:"Vai allo spot", st3d:"Trova spot vicini, genera una line con l'AI e allenati. Poi segnala, vota e aggiungi nuovi spot per la community.",
+    cta_title:"Pronto a salire<br>di livello?", cta_sub:"PKour è in sviluppo. Lascia la tua email per essere il primo a provarlo quando uscirà.",
+    cta_btn:"Avvisami", ep:"la-tua@email.com",
+    form_note:"Niente spam. Solo la notifica quando PKour è live.",
+    form_ok:"✓ Perfetto! Ti avvisiamo al lancio.", form_err:"Qualcosa è andato storto. Riprova.", form_inv:"Inserisci un'email valida.", form_loading:"Iscrizione in corso…",
+    footer:"© 2026 PKour. Fatto con 🤸 a Torino.",
+    doc_title:"PKour — L'app per il Parkour"
+  },
+  en: {
+    nav_cta:"Download the app", hero_eyebrow:"Your training companion",
+    hero_t1:"ALL OF", hero_t2:"PARKOUR", hero_t3:"IN ONE APP",
+    hero_desc:"Map spots, study movements, track your progress and let AI guide you to the next level. PKour is the ultimate app for the parkour and freerunning community.",
+    hero_cta:"Free Download", hero_cta2:"Explore features",
+    s_tricks:"Tricks", s_spots:"Spots", s_coach:"Coach",
+    map_near:"Spots Near You", map_sub:"2 spots nearby · Turin",
+    feat_eye:"Features", feat_title:"Every tool<br>you need", feat_sub:"From beginner athlete to expert traceur, PKour grows with you.",
+    f1t:"Spot Map", f1d:"Explore real spots on an interactive map. Add new spots, rate quality and safety, report issues. Always know where to train near you.",
+    f2t:"Tricks Encyclopedia", f2d:"Full list of movements with prerequisites, video tutorials and detailed descriptions. Mark what you can do, what you're learning, and what's still ahead.",
+    f3t:"Progress Tracker", f3d:"Record your attempts with local videos. Watch your technical growth over time and stay motivated with a visual progress timeline.",
+    f4t:"AI Coach", f4d:"Generate personalized lines and challenges based on the tricks you already know. Describe your spot, the AI builds a sequence tailored to you.",
+    f5t:"Challenges", f5d:"Challenge mode with friends or solo. Random tricks to learn, filtered by level. Keep your sessions intense with concrete goals.",
+    f6t:"Athlete Profile", f6d:"Your profile with full stats: tricks completed, spots visited, community rating. Show your progress and connect with other athletes.",
+    ss_eye:"App in action", ss_title:"Built for<br>the modern athlete", ss_sub:"An interface designed to be used in the field, in the sun, with dirty hands.",
+    sc1t:"Encyclopedia", sc1s:"Search a trick…",
+    lb1:"Beginner · Jumps", lb2:"Intermediate · Vault", lb3:"Advanced · Flip", lb4:"Beginner · Climbing", lb5:"Beginner · Vault",
+    bd1:"✓ Done", bd2:"✓ Done", bd3:"✓ Done", bw1:"In progress", bt1:"To do",
+    ai_hl:"Generate Your Line",
+    ai_m1:"Tell me what your spot looks like and I'll generate a personalized line based on your tricks!",
+    ai_m2:"2 walls ~60cm, a railing, wide grass for flipping",
+    ai_gen:"⚡ Generated Line", ai_s1:"Speed Vault over first wall", ai_s2:"Precision on the second", ai_s3:"Kong off the railing", ai_s4:"Webster on the grass",
+    ai_save:"✓ Save", ai_regen:"↺ Regenerate",
+    pr_bio:"4-year traceur · Turin", pr_ov:"Overall Progress", pr_fl:"Flip & Tricking",
+    sp_name:"Via Garibaldi Wall", sp_safe:"🛡️ Safe", sp_desc:"Wall about 3m long, great for precision and speed vault. Good concrete floor.", sp_vis:"✓ Mark as Visited",
+    how_eye:"How it works", how_title:"Three steps<br>to get started",
+    st1t:"Download & create profile", st1d:"Sign up, set your level and select the tricks you already know. PKour learns from you.",
+    st2t:"Explore the encyclopedia", st2d:"Browse hundreds of movements, watch tutorials, learn prerequisites and track progress with personal videos.",
+    st3t:"Go to the spot", st3d:"Find nearby spots, generate a line with AI and train. Then report, rate and add new spots for the community.",
+    cta_title:"Ready to level<br>up?", cta_sub:"PKour is in development. Leave your email to be the first to try it when it launches.",
+    cta_btn:"Notify me", ep:"your@email.com",
+    form_note:"No spam. Just a notification when PKour goes live.",
+    form_ok:"✓ You're in! We'll notify you at launch.", form_err:"Something went wrong. Please try again.", form_inv:"Please enter a valid email.", form_loading:"Signing up…",
+    footer:"© 2026 PKour. Made with 🤸 in Turin.",
+    doc_title:"PKour — The Parkour App"
+  }
+};
+
+// Detect browser locale
+const browserLang = (navigator.language || 'it').toLowerCase();
+let lang = browserLang.startsWith('it') ? 'it' : 'en';
+
+function applyLang(l) {
+  lang = l;
+  const t = T[l];
+  document.documentElement.lang = l;
+  document.title = t.doc_title;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (t[k] !== undefined) el.innerHTML = t[k];
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+    const k = el.getAttribute('data-i18n-ph');
+    if (t[k] !== undefined) el.placeholder = t[k];
+  });
+  document.getElementById('langToggle').textContent = l === 'it' ? 'EN' : 'IT';
+  // Reset form message
+  const msg = document.getElementById('formMsg');
+  msg.textContent = t.form_note;
+  msg.className = 'form-msg info';
+}
+
+function toggleLang() { applyLang(lang === 'it' ? 'en' : 'it'); }
+applyLang(lang);
+
+// ─── CONFIG ───────────────────────────────────────────────────────────────
+// Paste your Google Apps Script Web App URL here after deploying it.
+// Guide: Notion → PKour Project Hub → 📋 Setup Waitlist — Google Sheets
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwCffLed-NUtdg73hPKTT_QQIAz-TX2boc0sihf4BoPItcmQma-NTVbBx0Ma8ebFnqw/exec';
+
+// ─── Email submission ──────────────────────────────────────────────────────
+async function submitEmail() {
+  const t = T[lang];
+  const input = document.getElementById('emailInput');
+  const btn = document.getElementById('submitBtn');
+  const msg = document.getElementById('formMsg');
+  const email = input.value.trim();
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    msg.textContent = t.form_inv; msg.className = 'form-msg error';
+    input.focus(); return;
+  }
+
+  btn.disabled = true;
+  msg.textContent = t.form_loading; msg.className = 'form-msg info';
+
+  const today = new Date().toISOString().split('T')[0];
+  const langLabel = lang.toUpperCase();
+  const payload = { email, date: today, lang: langLabel, source: 'landing' };
+
+  // 1. Try Google Sheets (primary)
+  let savedToSheet = false;
+  if (GOOGLE_SHEET_URL) {
+    try {
+      await fetch(GOOGLE_SHEET_URL, {
+        method: 'POST',
+        // Google Apps Script requires no-cors when called from a browser page
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      // no-cors means we can't read the response, but if it didn't throw it went through
+      savedToSheet = true;
+    } catch(e) {
+      console.warn('Google Sheets unreachable, falling back to localStorage', e);
+    }
+  }
+
+  // 2. Always save locally as backup (works even offline)
+  try {
+    const saved = JSON.parse(localStorage.getItem('pkour_waitlist') || '[]');
+    if (!saved.find(r => r.email === email)) {
+      saved.push(payload);
+      localStorage.setItem('pkour_waitlist', JSON.stringify(saved));
+    }
+  } catch(e) {}
+
+  // 3. Show success
+  msg.textContent = t.form_ok;
+  msg.className = 'form-msg success';
+  input.value = '';
+  const btnSpan = btn.querySelector('span');
+  const origText = btnSpan.textContent;
+  btnSpan.textContent = '✓';
+  setTimeout(() => { btnSpan.innerHTML = origText; btn.disabled = false; }, 3000);
+}
+
+document.getElementById('emailInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitEmail();
+});
+
+// ─── Scroll reveal ────────────────────────────────────────────────────────
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }});
+}, { threshold: 0.1 });
+document.querySelectorAll('.feature-card, .step, .screenshot-phone').forEach(el => {
+  el.style.opacity='0'; el.style.transform='translateY(24px)';
+  el.style.transition='opacity 0.6s ease, transform 0.6s ease';
+  observer.observe(el);
+});
+
+// ─── Export backup CSV (from localStorage, run in browser console) ────────
+window.exportWaitlist = function() {
+  const saved = JSON.parse(localStorage.getItem('pkour_waitlist') || '[]');
+  if (!saved.length) { alert('Nessuna email nel backup locale / No emails in local backup'); return; }
+  const csv = 'Email,Date,Lang,Source\n' + saved.map(r => `${r.email},${r.date},${r.lang},${r.source||'landing'}`).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'pkour_waitlist_backup.csv'; a.click();
+};
+console.log(
+  '%c PKour Waitlist ',
+  'background:#126869;color:white;padding:4px 8px;border-radius:4px;font-weight:bold;',
+  GOOGLE_SHEET_URL
+    ? '✅ Google Sheets connected'
+    : '⚠️ GOOGLE_SHEET_URL not set — emails saved to localStorage only. See Notion guide to connect Google Sheets.',
+  '\nType exportWaitlist() to download the local backup as CSV'
+);
+</script>
+
+</body>
+</html>
