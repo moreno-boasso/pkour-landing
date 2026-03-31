@@ -189,7 +189,9 @@
         font-size: 12px;
         color: #9ca3af;
       }
-      input[type='text'] {
+      input[type='text'],
+      input[type='email'],
+      input[type='password'] {
         background: #020617;
         border-radius: 4px;
         border: 1px solid #1f2937;
@@ -198,27 +200,54 @@
         font-size: 12px;
         width: 220px;
       }
-      .token-wrapper {
+      .auth-wrapper {
         display: flex;
         flex-wrap: wrap;
         gap: 8px;
         align-items: center;
       }
-      .token-wrapper label {
+      .login-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      .auth-user {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+      .auth-label {
         font-size: 12px;
         color: #9ca3af;
+      }
+      .btn-logout {
+        background: #7c2d12;
+        color: #ffedd5;
+      }
+      #auth-status {
+        min-height: 18px;
       }
     </style>
   </head>
   <body>
     <header>
       <h1>PKour &mdash; Moderazione Spot</h1>
-      <div class="token-wrapper">
-        <label for="token">Firebase ID Token (admin):</label>
-        <input id="token" type="text" placeholder="Incolla qui il Bearer token" />
-        <button class="btn-refresh" id="btn-load">Ricarica lista</button>
+      <div class="auth-wrapper">
+        <form id="login-form" class="login-form">
+          <input id="email" type="email" placeholder="Email admin" autocomplete="username" required />
+          <input id="password" type="password" placeholder="Password" autocomplete="current-password" required />
+          <button class="btn-refresh" id="btn-login" type="submit">Login</button>
+        </form>
+        <div id="auth-user" class="auth-user" style="display:none;">
+          <span id="auth-user-label" class="auth-label"></span>
+          <button class="btn-refresh" id="btn-load" type="button">Ricarica lista</button>
+          <button class="btn-logout" id="btn-logout" type="button">Logout</button>
+        </div>
       </div>
     </header>
+    <div id="auth-status" class="small" style="padding: 8px 24px;"></div>
     <main>
       <section class="left">
         <div class="tabs">
@@ -273,11 +302,19 @@
     </main>
 
     <script>
-      const origin = window.location.origin || '';
+      const FIREBASE_WEB_API_KEY = 'AIzaSyD2L9ASdm2Nl0EJgr4-IIr84Xe1WWm_WbU';
       const baseUrl = 'https://api.pkour.it';
+      const authStatusEl = document.getElementById('auth-status');
+      const mainEl = document.querySelector('main');
       const listEl = document.getElementById('list');
-      const tokenInput = document.getElementById('token');
+      const loginForm = document.getElementById('login-form');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const authUser = document.getElementById('auth-user');
+      const authUserLabel = document.getElementById('auth-user-label');
+      const btnLogin = document.getElementById('btn-login');
       const btnLoad = document.getElementById('btn-load');
+      const btnLogout = document.getElementById('btn-logout');
 
       const detailWrapper = document.getElementById('detail');
       const detailEmpty = document.getElementById('detail-empty');
@@ -301,6 +338,75 @@
       let spots = [];
       let currentStatusFilter = 'pending';
       let currentStreetUrl = null;
+      let idToken = localStorage.getItem('pkour_admin_id_token') || '';
+      let loggedEmail = localStorage.getItem('pkour_admin_email') || '';
+
+      function setAuthStatus(message, isError = false) {
+        authStatusEl.textContent = message;
+        authStatusEl.style.color = isError ? '#fca5a5' : '#9ca3af';
+      }
+
+      function setAuthenticatedState(isAuthenticated) {
+        loginForm.style.display = isAuthenticated ? 'none' : 'flex';
+        authUser.style.display = isAuthenticated ? 'flex' : 'none';
+        mainEl.style.display = isAuthenticated ? 'grid' : 'none';
+        authUserLabel.textContent = isAuthenticated ? `Admin: ${loggedEmail}` : '';
+
+        if (!isAuthenticated) {
+          currentSpot = null;
+          listEl.innerHTML = '<div class="small">Effettua il login admin per visualizzare gli spot.</div>';
+          detailWrapper.style.display = 'none';
+          detailEmpty.style.display = 'block';
+        }
+      }
+
+      function clearAuthSession() {
+        idToken = '';
+        loggedEmail = '';
+        localStorage.removeItem('pkour_admin_id_token');
+        localStorage.removeItem('pkour_admin_email');
+      }
+
+      function mapFirebaseAuthError(code) {
+        const clean = String(code || '').toUpperCase();
+        switch (clean) {
+          case 'INVALID_LOGIN_CREDENTIALS':
+          case 'INVALID_PASSWORD':
+          case 'EMAIL_NOT_FOUND':
+            return 'Credenziali non valide';
+          case 'USER_DISABLED':
+            return 'Utente disabilitato';
+          case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+            return 'Troppi tentativi. Riprova più tardi';
+          default:
+            return 'Errore di autenticazione Firebase';
+        }
+      }
+
+      async function loginAdmin(email, password) {
+        const res = await fetch(
+          `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${encodeURIComponent(FIREBASE_WEB_API_KEY)}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email,
+              password,
+              returnSecureToken: true,
+            }),
+          },
+        );
+
+        const data = await res.json().catch(() => null);
+        if (!res.ok || !data || !data.idToken) {
+          const code = data && data.error ? data.error.message : null;
+          throw new Error(mapFirebaseAuthError(code));
+        }
+
+        return data;
+      }
 
       function statusClass(status) {
         switch (status) {
@@ -314,13 +420,14 @@
       }
 
       async function fetchJson(path, options = {}) {
-        const token = tokenInput.value.trim();
+        if (!idToken) {
+          throw new Error('Sessione admin non valida. Effettua il login.');
+        }
+
         const headers = {
           'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + idToken,
         };
-        if (token) {
-          headers['Authorization'] = 'Bearer ' + token;
-        }
 
         const res = await fetch(baseUrl + path, {
           ...options,
@@ -335,6 +442,11 @@
         const data = await res.json().catch(() => null);
         if (!res.ok) {
           const msg = (data && data.error) || 'Errore API';
+          if (res.status === 401 || res.status === 403) {
+            clearAuthSession();
+            setAuthenticatedState(false);
+            setAuthStatus('Accesso negato: account non admin o sessione scaduta.', true);
+          }
           alert(msg);
           throw new Error(msg);
         }
@@ -460,6 +572,47 @@
       btnReject.addEventListener('click', () => updateStatus('rejected'));
       btnDelete.addEventListener('click', deleteSpot);
 
+      loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = (emailInput.value || '').trim();
+        const password = passwordInput.value || '';
+
+        if (!email || !password) {
+          setAuthStatus('Inserisci email e password admin.', true);
+          return;
+        }
+
+        btnLogin.disabled = true;
+        setAuthStatus('Login in corso...');
+
+        try {
+          const authData = await loginAdmin(email, password);
+          idToken = authData.idToken;
+          loggedEmail = authData.email || email;
+          localStorage.setItem('pkour_admin_id_token', idToken);
+          localStorage.setItem('pkour_admin_email', loggedEmail);
+
+          setAuthenticatedState(true);
+          setAuthStatus('Login effettuato. Verifica permessi admin...');
+          await loadSpots(currentStatusFilter);
+          setAuthStatus('Accesso admin attivo.');
+          passwordInput.value = '';
+        } catch (err) {
+          clearAuthSession();
+          setAuthenticatedState(false);
+          setAuthStatus(err instanceof Error ? err.message : 'Errore durante il login', true);
+        } finally {
+          btnLogin.disabled = false;
+        }
+      });
+
+      btnLogout.addEventListener('click', () => {
+        clearAuthSession();
+        setAuthenticatedState(false);
+        setAuthStatus('Logout effettuato.');
+      });
+
       tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
           const status = tab.dataset.status || 'pending';
@@ -475,8 +628,15 @@
         }
       });
 
-      // auto load on first open (non richiede token perché GET /api/spots è pubblico)
-      loadSpots(currentStatusFilter);
+      setAuthenticatedState(Boolean(idToken));
+      if (idToken) {
+        setAuthStatus('Sessione trovata. Verifica accesso admin...');
+        loadSpots(currentStatusFilter)
+          .then(() => setAuthStatus('Accesso admin attivo.'))
+          .catch(() => {});
+      } else {
+        setAuthStatus('Effettua login con account admin Firebase.');
+      }
     </script>
   </body>
 </html>
