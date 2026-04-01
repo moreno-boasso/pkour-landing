@@ -790,7 +790,7 @@
               <input id="spot-search" class="search-field" type="text" placeholder="Cerca per nome o tipo">
             </div>
             <div class="search-meta">
-              <span>Filtra la lista corrente senza nuove chiamate.</span>
+              <span>Premi Invio o clicca il pulsante per cercare.</span>
               <button id="search-clear" class="search-clear" type="button" hidden>Pulisci</button>
             </div>
           </div>
@@ -1355,10 +1355,11 @@
     });
   });
 
-  searchInput.addEventListener('input', () => {
-    searchRaw = searchInput.value.trim();
-    searchQuery = searchRaw.toLowerCase();
-    scheduleSearch();
+  searchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      performSearch();
+    }
   });
 
   searchClearButton.addEventListener('click', () => {
@@ -1405,13 +1406,10 @@
     }
   }
 
-  function scheduleSearch() {
-    if (searchDebounce) {
-      clearTimeout(searchDebounce);
-    }
-    searchDebounce = setTimeout(() => {
-      loadSpots();
-    }, 350);
+  function performSearch() {
+    searchRaw = searchInput.value.trim();
+    searchQuery = searchRaw.toLowerCase();
+    loadSpots();
   }
 </script>
 </body>
