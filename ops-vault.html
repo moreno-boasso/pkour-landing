@@ -343,8 +343,15 @@
     gap: 8px;
   }
 
+  .search-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
   .search-input {
     position: relative;
+    flex: 1;
   }
 
   .search-input svg {
@@ -783,11 +790,19 @@
             <button class="tab" data-status="rejected" type="button">Rejected</button>
           </div>
           <div class="search-shell">
-            <div class="search-input">
-              <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18C12.8486 18 14.5499 17.3161 15.864 16.173L19.243 19.556C19.6335 19.9465 20.2667 19.9465 20.6572 19.556C21.0478 19.1654 21.0478 18.5323 20.6572 18.1417L17.2782 14.7583C18.4216 13.4441 19.1053 11.7433 19.1053 9.89474C19.1053 6.02874 15.9713 2.89474 12.1053 2.89474C8.23929 2.89474 5.10529 6.02874 5.10529 9.89474" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-              </svg>
-              <input id="spot-search" class="search-field" type="text" placeholder="Cerca per nome o tipo">
+            <div class="search-row">
+              <div class="search-input">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18C12.8486 18 14.5499 17.3161 15.864 16.173L19.243 19.556C19.6335 19.9465 20.2667 19.9465 20.6572 19.556C21.0478 19.1654 21.0478 18.5323 20.6572 18.1417L17.2782 14.7583C18.4216 13.4441 19.1053 11.7433 19.1053 9.89474C19.1053 6.02874 15.9713 2.89474 12.1053 2.89474C8.23929 2.89474 5.10529 6.02874 5.10529 9.89474" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                <input id="spot-search" class="search-field" type="text" placeholder="Cerca per nome o tipo">
+              </div>
+              <button id="search-button" class="button button-secondary" type="button">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18C12.8486 18 14.5499 17.3161 15.864 16.173L19.243 19.556C19.6335 19.9465 20.2667 19.9465 20.6572 19.556C21.0478 19.1654 21.0478 18.5323 20.6572 18.1417L17.2782 14.7583C18.4216 13.4441 19.1053 11.7433 19.1053 9.89474C19.1053 6.02874 15.9713 2.89474 12.1053 2.89474C8.23929 2.89474 5.10529 6.02874 5.10529 9.89474" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+                Search
+              </button>
             </div>
             <div class="search-meta">
               <span>Premi Invio o clicca il pulsante per cercare.</span>
@@ -933,6 +948,7 @@
   const sessionEmail = document.getElementById('session-email');
   const tabs = Array.from(document.querySelectorAll('.tab'));
   const searchInput = document.getElementById('spot-search');
+  const searchButton = document.getElementById('search-button');
   const searchClearButton = document.getElementById('search-clear');
   const listSummary = document.getElementById('list-summary');
   const spotList = document.getElementById('spot-list');
@@ -966,8 +982,6 @@
   let searchQuery = '';
   let searchRaw = '';
   let listSummaryBase = 'Accedi per caricare gli spot.';
-  let searchDebounce = null;
-
   function setStatus(message, type = 'info') {
     statusBox.textContent = message;
     statusBox.className = 'status-box' + (type === 'error' ? ' error' : type === 'success' ? ' success' : '');
@@ -1362,6 +1376,8 @@
     }
   });
 
+  searchButton.addEventListener('click', performSearch);
+
   searchClearButton.addEventListener('click', () => {
     clearSearch();
     loadSpots();
@@ -1400,10 +1416,6 @@
     searchQuery = '';
     searchInput.value = '';
     searchClearButton.hidden = true;
-    if (searchDebounce) {
-      clearTimeout(searchDebounce);
-      searchDebounce = null;
-    }
   }
 
   function performSearch() {
