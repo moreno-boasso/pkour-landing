@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PKour — Ops Vault</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #126869;
+    --accent-bright: #1a9a9c;
+    --accent-dim: #0d4f50;
+    --bg: #080c0c;
+    --bg2: #0d1515;
+    --bg3: #111e1e;
+    --panel: rgba(13, 21, 21, 0.86);
+    --text: #e8f0f0;
+    --text-dim: #7a9999;
+    --text-muted: #4b6666;
+    --border: rgba(18,104,105,0.22);
+    --glow: rgba(18,104,105,0.24);
+    --danger: #9f2f2f;
+    --danger-bright: #dc5a5a;
+    --success: #157a54;
+    --success-bright: #22b278;
+    --warning: #8d6b18;
+    --warning-bright: #e0b64a;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at top right, rgba(18,104,105,0.16), transparent 30%),
+      radial-gradient(circle at bottom left, rgba(18,104,105,0.10), transparent 35%),
+      var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .shell {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    padding: 28px;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 24px;
+    padding: 20px 24px;
+    background: rgba(8,12,12,0.78);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.28);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand-mark {
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+    display: grid;
+    place-items: center;
+    box-shadow: 0 16px 32px var(--glow);
+  }
+
+  .brand-copy h1 {
+    margin: 0;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 2px;
+    font-size: 34px;
+    line-height: 1;
+  }
+
+  .brand-copy p {
+    margin: 6px 0 0;
+    color: var(--text-dim);
+    font-size: 13px;
+    letter-spacing: 0.4px;
+  }
+
+  .session-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(18,104,105,0.12);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 360px minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    backdrop-filter: blur(16px);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.22);
+  }
+
+  .sidebar,
+  .content {
+    min-height: calc(100vh - 132px);
+  }
+
+  .sidebar {
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .content {
+    padding: 22px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--accent-bright);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent-bright);
+  }
+
+  .title {
+    margin: 8px 0 0;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 38px;
+    line-height: 0.96;
+    letter-spacing: 1.5px;
+  }
+
+  .subtitle {
+    margin: 10px 0 0;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-dim);
+  }
+
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: rgba(8,12,12,0.52);
+    padding: 18px;
+  }
+
+  .card h2,
+  .card h3 {
+    margin: 0;
+    font-size: 14px;
+    letter-spacing: 0.4px;
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .label {
+    font-size: 12px;
+    color: var(--text-dim);
+    letter-spacing: 0.3px;
+  }
+
+  .input,
+  .textarea {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    background: rgba(8,12,12,0.7);
+    color: var(--text);
+    padding: 14px 16px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .input:focus,
+  .textarea:focus {
+    border-color: var(--accent-bright);
+    box-shadow: 0 0 0 4px rgba(26,154,156,0.12);
+  }
+
+  .textarea {
+    resize: vertical;
+    min-height: 110px;
+  }
+
+  .button-row,
+  .actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .button {
+    appearance: none;
+    border: none;
+    border-radius: 14px;
+    padding: 12px 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    transition: transform 0.18s, opacity 0.18s, box-shadow 0.18s, background 0.18s;
+  }
+
+  .button:hover {
+    transform: translateY(-1px);
+  }
+
+  .button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
+  }
+
+  .button-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+    color: white;
+    box-shadow: 0 14px 28px var(--glow);
+  }
+
+  .button-secondary {
+    background: rgba(255,255,255,0.05);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  .button-success {
+    background: linear-gradient(135deg, var(--success), var(--success-bright));
+    color: white;
+  }
+
+  .button-danger {
+    background: linear-gradient(135deg, var(--danger), var(--danger-bright));
+    color: white;
+  }
+
+  .button-ghost {
+    background: rgba(255,255,255,0.04);
+    color: var(--text-dim);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .status-box {
+    min-height: 22px;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .status-box.error {
+    color: #ff9595;
+  }
+
+  .status-box.success {
+    color: #7df0be;
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+
+  .tab {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.03);
+    color: var(--text-dim);
+    padding: 12px 10px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .tab.active {
+    background: rgba(18,104,105,0.16);
+    color: var(--text);
+    border-color: rgba(26,154,156,0.35);
+  }
+
+  .spot-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: calc(100vh - 410px);
+    overflow: auto;
+    padding-right: 4px;
+  }
+
+  .spot-item {
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 18px;
+    padding: 14px;
+    background: rgba(255,255,255,0.03);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  }
+
+  .spot-item:hover {
+    transform: translateY(-1px);
+    border-color: rgba(26,154,156,0.24);
+  }
+
+  .spot-item.active {
+    border-color: rgba(26,154,156,0.5);
+    background: rgba(18,104,105,0.14);
+  }
+
+  .spot-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+  }
+
+  .spot-name {
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  .spot-meta,
+  .muted {
+    color: var(--text-dim);
+    font-size: 12px;
+    line-height: 1.55;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 11px;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+  }
+
+  .badge.pending {
+    background: rgba(141,107,24,0.16);
+    color: var(--warning-bright);
+    border-color: rgba(224,182,74,0.24);
+  }
+
+  .badge.approved {
+    background: rgba(21,122,84,0.18);
+    color: #7df0be;
+    border-color: rgba(34,178,120,0.28);
+  }
+
+  .badge.rejected {
+    background: rgba(159,47,47,0.18);
+    color: #ffadad;
+    border-color: rgba(220,90,90,0.3);
+  }
+
+  .detail-empty {
+    display: grid;
+    place-items: center;
+    min-height: calc(100vh - 210px);
+    text-align: center;
+    color: var(--text-dim);
+    padding: 24px;
+  }
+
+  .detail {
+    display: none;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .hero-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) 280px;
+    gap: 18px;
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .hero-title-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .hero-title-row h2 {
+    margin: 0;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 1.5px;
+    line-height: 0.95;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .metric {
+    padding: 14px;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .metric-label {
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .metric-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 1px;
+  }
+
+  .map-shell {
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.06);
+    min-height: 100%;
+    background: rgba(255,255,255,0.03);
+  }
+
+  .map-shell iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    border: 0;
+    display: block;
+  }
+
+  .grid-two {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .list-text {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .mini-chip {
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+
+  .entries {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .entry {
+    border: 1px solid rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.03);
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .entry-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .entry-title {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .entry-body {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .icon {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 auto;
+  }
+
+  @media (max-width: 1180px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    .sidebar,
+    .content {
+      min-height: auto;
+    }
+
+    .spot-list {
+      max-height: 420px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .shell {
+      padding: 16px;
+    }
+
+    .topbar {
+      padding: 18px;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-card,
+    .grid-two {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .brand-copy h1 {
+      font-size: 28px;
+    }
+
+    .hero-title-row h2 {
+      font-size: 32px;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <div class="topbar panel">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 18L12 6L19 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9.5 18L12 13.5L14.5 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="brand-copy">
+          <div class="eyebrow">Restricted route</div>
+          <h1>Ops Vault</h1>
+          <p>Moderazione spot PKour con accesso admin e sessione protetta.</p>
+        </div>
+      </div>
+      <div class="session-bar">
+        <div id="session-chip" class="chip hidden">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 13C14.7614 13 17 10.7614 17 8C17 5.23858 14.7614 3 12 3C9.23858 3 7 5.23858 7 8C7 10.7614 9.23858 13 12 13Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="M4 20C4.8 16.9 7.8 15 12 15C16.2 15 19.2 16.9 20 20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          <span id="session-email"></span>
+        </div>
+        <button id="reload-button" class="button button-secondary hidden" type="button">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 12A8 8 0 1 1 17.2 5.94" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M20 4V10H14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Ricarica
+        </button>
+        <button id="logout-button" class="button button-ghost hidden" type="button">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 21H5C4.44772 21 4 20.5523 4 20V4C4 3.44772 4.44772 3 5 3H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M16 17L20 12L16 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M20 12H10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+          Logout
+        </button>
+      </div>
+    </div>
+
+    <div class="layout">
+      <aside class="sidebar panel">
+        <div>
+          <div class="eyebrow">Access</div>
+          <h2 class="title">Admin gate</h2>
+          <p class="subtitle">Login con account admin. Nessuna chiave Firebase è esposta nella pagina.</p>
+        </div>
+
+        <section id="login-card" class="card stack">
+          <div class="field">
+            <label class="label" for="email">Email admin</label>
+            <input id="email" class="input" type="email" autocomplete="username" placeholder="admin@pkour.it">
+          </div>
+          <div class="field">
+            <label class="label" for="password">Password</label>
+            <input id="password" class="input" type="password" autocomplete="current-password" placeholder="Password">
+          </div>
+          <div class="button-row">
+            <button id="login-button" class="button button-primary" type="button">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 17L15 12L10 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M15 12H4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M20 20V4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+              Entra
+            </button>
+          </div>
+          <div id="status-box" class="status-box"></div>
+        </section>
+
+        <section class="card stack">
+          <div class="tabs" id="tabs">
+            <button class="tab active" data-status="pending" type="button">Pending</button>
+            <button class="tab" data-status="approved" type="button">Approved</button>
+            <button class="tab" data-status="rejected" type="button">Rejected</button>
+          </div>
+          <div class="muted" id="list-summary">Accedi per caricare gli spot.</div>
+          <div id="spot-list" class="spot-list"></div>
+        </section>
+      </aside>
+
+      <main class="content panel">
+        <div id="detail-empty" class="detail-empty">
+          <div>
+            <div class="eyebrow" style="justify-content:center;">Waiting input</div>
+            <h2 class="title" style="font-size:42px;">Nessuno spot selezionato</h2>
+            <p class="subtitle" style="max-width:540px; margin: 14px auto 0;">Quando la sessione admin è attiva puoi aprire uno spot pending, controllare foto, coordinate, recensioni e decidere se approvare o rifiutare.</p>
+          </div>
+        </div>
+
+        <div id="detail" class="detail">
+          <section class="hero-card">
+            <div class="card hero-copy">
+              <div class="hero-title-row">
+                <div>
+                  <div class="eyebrow">Spot review</div>
+                  <h2 id="detail-name"></h2>
+                </div>
+                <div id="detail-status" class="badge pending">PENDING</div>
+              </div>
+              <div class="muted" id="detail-description"></div>
+              <div class="hero-grid">
+                <div class="metric">
+                  <div class="metric-label">Tipo</div>
+                  <div class="metric-value" id="detail-type">-</div>
+                </div>
+                <div class="metric">
+                  <div class="metric-label">Visitatori</div>
+                  <div class="metric-value" id="detail-visitors">0</div>
+                </div>
+                <div class="metric">
+                  <div class="metric-label">Rating</div>
+                  <div class="metric-value" id="detail-rating">-</div>
+                </div>
+              </div>
+              <div class="actions">
+                <button id="approve-button" class="button button-success" type="button">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M5 13L9 17L19 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  Approva
+                </button>
+                <button id="reject-button" class="button button-danger" type="button">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 6L18 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M18 6L6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  Rifiuta
+                </button>
+                <button id="delete-button" class="button button-ghost" type="button">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 7H20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M9 7V5C9 4.44772 9.44772 4 10 4H14C14.5523 4 15 4.44772 15 5V7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    <path d="M7 7L8 19C8.04472 19.5523 8.50552 20 9.06 20H14.94C15.4945 20 15.9553 19.5523 16 19L17 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  </svg>
+                  Elimina
+                </button>
+                <button id="maps-button" class="button button-secondary" type="button">
+                  <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.5 20L9.5 18L4 20V6L9.5 4L14.5 6L20 4V18L14.5 20Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    <path d="M9.5 4V18" stroke="currentColor" stroke-width="1.8"/>
+                    <path d="M14.5 6V20" stroke="currentColor" stroke-width="1.8"/>
+                  </svg>
+                  Apri Maps
+                </button>
+              </div>
+            </div>
+
+            <div class="map-shell">
+              <iframe id="map-frame" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </section>
+
+          <section class="grid-two">
+            <div class="card stack">
+              <h3>Features</h3>
+              <div id="detail-features" class="list-text"></div>
+            </div>
+            <div class="card stack">
+              <h3>Coordinate</h3>
+              <div id="detail-coords" class="muted"></div>
+              <div id="detail-author" class="muted"></div>
+            </div>
+          </section>
+
+          <section class="grid-two">
+            <div class="card stack">
+              <h3>Foto</h3>
+              <div id="detail-photos" class="entries"></div>
+            </div>
+            <div class="card stack">
+              <h3>Recensioni recenti</h3>
+              <div id="detail-reviews" class="entries"></div>
+            </div>
+          </section>
+
+          <section class="card stack">
+            <h3>Segnalazioni recenti</h3>
+            <div id="detail-reports" class="entries"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+  </div>
+
+<script>
+  const apiBase = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3000'
+    : 'https://api.pkour.it';
+
+  const statusBox = document.getElementById('status-box');
+  const loginCard = document.getElementById('login-card');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const loginButton = document.getElementById('login-button');
+  const reloadButton = document.getElementById('reload-button');
+  const logoutButton = document.getElementById('logout-button');
+  const sessionChip = document.getElementById('session-chip');
+  const sessionEmail = document.getElementById('session-email');
+  const tabs = Array.from(document.querySelectorAll('.tab'));
+  const listSummary = document.getElementById('list-summary');
+  const spotList = document.getElementById('spot-list');
+  const detailEmpty = document.getElementById('detail-empty');
+  const detail = document.getElementById('detail');
+  const detailName = document.getElementById('detail-name');
+  const detailStatus = document.getElementById('detail-status');
+  const detailDescription = document.getElementById('detail-description');
+  const detailType = document.getElementById('detail-type');
+  const detailVisitors = document.getElementById('detail-visitors');
+  const detailRating = document.getElementById('detail-rating');
+  const detailFeatures = document.getElementById('detail-features');
+  const detailCoords = document.getElementById('detail-coords');
+  const detailAuthor = document.getElementById('detail-author');
+  const detailPhotos = document.getElementById('detail-photos');
+  const detailReviews = document.getElementById('detail-reviews');
+  const detailReports = document.getElementById('detail-reports');
+  const mapFrame = document.getElementById('map-frame');
+  const approveButton = document.getElementById('approve-button');
+  const rejectButton = document.getElementById('reject-button');
+  const deleteButton = document.getElementById('delete-button');
+  const mapsButton = document.getElementById('maps-button');
+
+  let currentStatus = 'pending';
+  let currentSpotId = null;
+  let currentSpot = null;
+  let isAuthenticated = false;
+  let currentMapsUrl = null;
+  let spots = [];
+
+  function setStatus(message, type = 'info') {
+    statusBox.textContent = message;
+    statusBox.className = 'status-box' + (type === 'error' ? ' error' : type === 'success' ? ' success' : '');
+  }
+
+  function setAuthState(authenticated, email = '') {
+    isAuthenticated = authenticated;
+    loginCard.classList.toggle('hidden', authenticated);
+    reloadButton.classList.toggle('hidden', !authenticated);
+    logoutButton.classList.toggle('hidden', !authenticated);
+    sessionChip.classList.toggle('hidden', !authenticated);
+    sessionEmail.textContent = email;
+
+    if (!authenticated) {
+      spots = [];
+      currentSpot = null;
+      currentSpotId = null;
+      currentMapsUrl = null;
+      listSummary.textContent = 'Accedi per caricare gli spot.';
+      spotList.innerHTML = '';
+      detail.classList.remove('active');
+      detail.style.display = 'none';
+      detailEmpty.style.display = 'grid';
+    }
+  }
+
+  function buildApiUrl(path) {
+    return apiBase + path;
+  }
+
+  async function request(path, options = {}) {
+    const response = await fetch(buildApiUrl(path), {
+      credentials: 'include',
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options.headers || {}),
+      },
+    });
+
+    if (response.status === 204) {
+      return null;
+    }
+
+    const data = await response.json().catch(() => null);
+
+    if (!response.ok) {
+      throw new Error((data && data.error) || 'Errore API');
+    }
+
+    return data;
+  }
+
+  function renderSpotList() {
+    if (!spots.length) {
+      spotList.innerHTML = '<div class="muted">Nessuno spot in questo stato.</div>';
+      return;
+    }
+
+    spotList.innerHTML = '';
+
+    spots.forEach((spot) => {
+      const item = document.createElement('button');
+      item.type = 'button';
+      item.className = 'spot-item' + (String(spot.id) === String(currentSpotId) ? ' active' : '');
+      item.innerHTML = `
+        <div class="spot-head">
+          <div>
+            <div class="spot-name">${escapeHtml(spot.nome)}</div>
+            <div class="spot-meta">${escapeHtml(spot.tipo || 'n.d.')}</div>
+          </div>
+          <div class="badge ${escapeHtml(spot.status)}">${escapeHtml(spot.status)}</div>
+        </div>
+        <div class="spot-meta">lat ${Number(spot.posizione.lat).toFixed(4)} · lon ${Number(spot.posizione.lon).toFixed(4)}</div>
+      `;
+      item.addEventListener('click', () => selectSpot(spot.id));
+      spotList.appendChild(item);
+    });
+  }
+
+  async function loadSession() {
+    try {
+      const data = await request('/api/admin/session');
+      setAuthState(true, data.user.email || 'admin');
+      setStatus('Sessione admin attiva.', 'success');
+      await loadSpots();
+    } catch (_error) {
+      setAuthState(false);
+      setStatus('Accedi con un account admin.', 'info');
+    }
+  }
+
+  async function login() {
+    const email = (emailInput.value || '').trim();
+    const password = passwordInput.value || '';
+
+    if (!email || !password) {
+      setStatus('Inserisci email e password.', 'error');
+      return;
+    }
+
+    loginButton.disabled = true;
+    setStatus('Login in corso...');
+
+    try {
+      const data = await request('/api/admin/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+      passwordInput.value = '';
+      setAuthState(true, data.user.email || email);
+      setStatus('Login completato.', 'success');
+      await loadSpots();
+    } catch (error) {
+      setAuthState(false);
+      setStatus(error instanceof Error ? error.message : 'Errore di login', 'error');
+    } finally {
+      loginButton.disabled = false;
+    }
+  }
+
+  async function logout() {
+    try {
+      await request('/api/admin/logout', { method: 'POST' });
+    } catch (_error) {
+    }
+
+    setAuthState(false);
+    setStatus('Logout effettuato.', 'info');
+  }
+
+  async function loadSpots() {
+    if (!isAuthenticated) {
+      return;
+    }
+
+    listSummary.textContent = 'Caricamento spot...';
+    spotList.innerHTML = '';
+
+    try {
+      const data = await request(`/api/admin/spots?status=${encodeURIComponent(currentStatus)}&limit=50&offset=0`);
+      spots = Array.isArray(data.data) ? data.data : [];
+      listSummary.textContent = `${spots.length} spot in stato ${currentStatus}.`;
+      renderSpotList();
+
+      if (currentSpotId != null && spots.some((spot) => String(spot.id) === String(currentSpotId))) {
+        await selectSpot(currentSpotId, false);
+      } else if (currentStatus === 'pending' && spots.length > 0) {
+        await selectSpot(spots[0].id, false);
+      } else {
+        currentSpotId = null;
+        currentSpot = null;
+        detail.style.display = 'none';
+        detailEmpty.style.display = 'grid';
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Errore nel caricamento';
+      if (message.toLowerCase().includes('sessione') || message.toLowerCase().includes('autoriz')) {
+        setAuthState(false);
+      }
+      listSummary.textContent = message;
+      setStatus(message, 'error');
+    }
+  }
+
+  async function selectSpot(spotId, updateList = true) {
+    currentSpotId = spotId;
+    if (updateList) {
+      renderSpotList();
+    }
+
+    try {
+      currentSpot = await request(`/api/admin/spots/${spotId}`);
+      renderDetail();
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Errore nel caricamento dettaglio', 'error');
+    }
+  }
+
+  function renderDetail() {
+    if (!currentSpot) {
+      detail.style.display = 'none';
+      detailEmpty.style.display = 'grid';
+      return;
+    }
+
+    detailEmpty.style.display = 'none';
+    detail.style.display = 'flex';
+
+    detailName.textContent = currentSpot.nome || 'Spot';
+    detailDescription.textContent = currentSpot.descrizione || 'Nessuna descrizione disponibile.';
+    detailType.textContent = (currentSpot.tipo || 'n.d.').toUpperCase();
+    detailVisitors.textContent = String(currentSpot.visitatori_count || 0);
+    detailRating.textContent = currentSpot.rating
+      ? `${formatNumber(currentSpot.rating.qualita_avg)} / ${formatNumber(currentSpot.rating.sicurezza_avg)}`
+      : 'N/A';
+
+    const statusValue = (currentSpot.status || 'pending').toLowerCase();
+    detailStatus.className = `badge ${statusValue}`;
+    detailStatus.textContent = statusValue.toUpperCase();
+
+    const lat = Number(currentSpot.posizione.lat);
+    const lon = Number(currentSpot.posizione.lon);
+    detailCoords.textContent = `lat ${lat.toFixed(6)} · lon ${lon.toFixed(6)}`;
+    detailAuthor.textContent = currentSpot.aggiunto_da
+      ? `Creato da ${currentSpot.aggiunto_da.nome || currentSpot.aggiunto_da.username || 'utente'} · id ${currentSpot.aggiunto_da.user_id}`
+      : 'Autore non disponibile';
+
+    detailFeatures.innerHTML = '';
+    const features = Array.isArray(currentSpot.features) ? currentSpot.features : [];
+    if (!features.length) {
+      detailFeatures.innerHTML = '<span class="mini-chip">Nessuna feature</span>';
+    } else {
+      features.forEach((feature) => {
+        const chip = document.createElement('span');
+        chip.className = 'mini-chip';
+        chip.textContent = feature;
+        detailFeatures.appendChild(chip);
+      });
+    }
+
+    renderEntries(detailPhotos, Array.isArray(currentSpot.foto) ? currentSpot.foto : [], (photo) => ({
+      title: photo.descrizione || 'Foto spot',
+      meta: formatDate(photo.created_at),
+      body: photo.url,
+    }));
+
+    renderEntries(detailReviews, Array.isArray(currentSpot.recensioni) ? currentSpot.recensioni : [], (review) => ({
+      title: `${review.user?.nome || review.user?.username || 'Utente'} · Q ${review.qualita} · S ${review.sicurezza}`,
+      meta: formatDate(review.created_at),
+      body: review.commento || 'Nessun commento testuale.',
+    }));
+
+    renderEntries(detailReports, Array.isArray(currentSpot.segnalazioni) ? currentSpot.segnalazioni : [], (report) => ({
+      title: `${report.user?.nome || report.user?.username || 'Utente'} · ${report.motivo || 'report'}`,
+      meta: formatDate(report.created_at),
+      body: report.descrizione || 'Nessuna descrizione.',
+    }));
+
+    const delta = 0.01;
+    mapFrame.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lon - delta}%2C${lat - delta}%2C${lon + delta}%2C${lat + delta}&layer=mapnik&marker=${lat}%2C${lon}`;
+    currentMapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(`${lat},${lon}`)}`;
+
+    const isPending = statusValue === 'pending';
+    approveButton.disabled = !isPending;
+    rejectButton.disabled = !isPending;
+  }
+
+  function renderEntries(container, entries, mapper) {
+    container.innerHTML = '';
+
+    if (!entries.length) {
+      container.innerHTML = '<div class="muted">Nessun elemento disponibile.</div>';
+      return;
+    }
+
+    entries.forEach((entry) => {
+      const mapped = mapper(entry);
+      const node = document.createElement('div');
+      node.className = 'entry';
+      node.innerHTML = `
+        <div class="entry-top">
+          <div class="entry-title">${escapeHtml(mapped.title)}</div>
+          <div class="muted">${escapeHtml(mapped.meta)}</div>
+        </div>
+        <div class="entry-body">${escapeHtml(mapped.body)}</div>
+      `;
+      container.appendChild(node);
+    });
+  }
+
+  async function updateStatus(nextStatus) {
+    if (!currentSpot) {
+      return;
+    }
+
+    const label = nextStatus === 'approved' ? 'approvare' : 'rifiutare';
+    const confirmed = window.confirm(`Confermi di voler ${label} questo spot?`);
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await request(`/api/admin/spots/${currentSpot.id}/status`, {
+        method: 'PATCH',
+        body: JSON.stringify({ status: nextStatus }),
+      });
+      setStatus(`Spot ${nextStatus === 'approved' ? 'approvato' : 'rifiutato'}.`, 'success');
+      await loadSpots();
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Errore aggiornamento status', 'error');
+    }
+  }
+
+  async function deleteSpot() {
+    if (!currentSpot) {
+      return;
+    }
+
+    const confirmed = window.confirm('Eliminare definitivamente questo spot?');
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      await request(`/api/admin/spots/${currentSpot.id}`, { method: 'DELETE' });
+      setStatus('Spot eliminato.', 'success');
+      currentSpot = null;
+      currentSpotId = null;
+      await loadSpots();
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'Errore eliminazione spot', 'error');
+    }
+  }
+
+  function formatNumber(value) {
+    const parsed = Number(value);
+    if (Number.isNaN(parsed)) {
+      return '-';
+    }
+    return parsed.toFixed(1);
+  }
+
+  function formatDate(value) {
+    if (!value) {
+      return 'n.d.';
+    }
+
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) {
+      return 'n.d.';
+    }
+
+    return new Intl.DateTimeFormat('it-IT', {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    }).format(date);
+  }
+
+  function escapeHtml(value) {
+    return String(value ?? '')
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  loginButton.addEventListener('click', login);
+  reloadButton.addEventListener('click', loadSpots);
+  logoutButton.addEventListener('click', logout);
+  approveButton.addEventListener('click', () => updateStatus('approved'));
+  rejectButton.addEventListener('click', () => updateStatus('rejected'));
+  deleteButton.addEventListener('click', deleteSpot);
+  mapsButton.addEventListener('click', () => {
+    if (currentMapsUrl) {
+      window.open(currentMapsUrl, '_blank', 'noopener');
+    }
+  });
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', async () => {
+      currentStatus = tab.dataset.status || 'pending';
+      tabs.forEach((item) => item.classList.toggle('active', item === tab));
+      await loadSpots();
+    });
+  });
+
+  emailInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      login();
+    }
+  });
+
+  passwordInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      login();
+    }
+  });
+
+  loadSession();
+</script>
+</body>
+</html>
