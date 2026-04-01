@@ -337,6 +337,65 @@
     border-color: rgba(26,154,156,0.35);
   }
 
+  .search-shell {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .search-input {
+    position: relative;
+  }
+
+  .search-input svg {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    width: 16px;
+    height: 16px;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .search-field {
+    width: 100%;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.03);
+    color: var(--text);
+    padding: 11px 14px 11px 38px;
+    font-size: 13px;
+    outline: none;
+  }
+
+  .search-field:focus {
+    border-color: rgba(26,154,156,0.4);
+    box-shadow: 0 0 0 3px rgba(26,154,156,0.14);
+  }
+
+  .search-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .search-clear {
+    border: none;
+    background: none;
+    color: var(--accent-bright);
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+
+  .search-clear[hidden] {
+    display: none;
+  }
+
   .spot-list {
     display: flex;
     flex-direction: column;
@@ -723,6 +782,18 @@
             <button class="tab" data-status="approved" type="button">Approved</button>
             <button class="tab" data-status="rejected" type="button">Rejected</button>
           </div>
+          <div class="search-shell">
+            <div class="search-input">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M11 4C7.13401 4 4 7.13401 4 11C4 14.866 7.13401 18 11 18C12.8486 18 14.5499 17.3161 15.864 16.173L19.243 19.556C19.6335 19.9465 20.2667 19.9465 20.6572 19.556C21.0478 19.1654 21.0478 18.5323 20.6572 18.1417L17.2782 14.7583C18.4216 13.4441 19.1053 11.7433 19.1053 9.89474C19.1053 6.02874 15.9713 2.89474 12.1053 2.89474C8.23929 2.89474 5.10529 6.02874 5.10529 9.89474" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+              <input id="spot-search" class="search-field" type="text" placeholder="Cerca per nome o tipo">
+            </div>
+            <div class="search-meta">
+              <span>Filtra la lista corrente senza nuove chiamate.</span>
+              <button id="search-clear" class="search-clear" type="button" hidden>Pulisci</button>
+            </div>
+          </div>
           <div class="muted" id="list-summary">Accedi per caricare gli spot.</div>
           <div id="spot-list" class="spot-list"></div>
         </section>
@@ -861,6 +932,8 @@
   const sessionChip = document.getElementById('session-chip');
   const sessionEmail = document.getElementById('session-email');
   const tabs = Array.from(document.querySelectorAll('.tab'));
+  const searchInput = document.getElementById('spot-search');
+  const searchClearButton = document.getElementById('search-clear');
   const listSummary = document.getElementById('list-summary');
   const spotList = document.getElementById('spot-list');
   const detailEmpty = document.getElementById('detail-empty');
@@ -890,6 +963,10 @@
   let isAuthenticated = false;
   let currentMapsUrl = null;
   let spots = [];
+  let searchQuery = '';
+  let searchRaw = '';
+  let listSummaryBase = 'Accedi per caricare gli spot.';
+  let searchDebounce = null;
 
   function setStatus(message, type = 'info') {
     statusBox.textContent = message;
@@ -945,14 +1022,24 @@
   }
 
   function renderSpotList() {
-    if (!spots.length) {
-      spotList.innerHTML = '<div class="muted">Nessuno spot in questo stato.</div>';
+    const filteredSpots = getFilteredSpots();
+
+    if (searchQuery) {
+      listSummary.textContent = `${filteredSpots.length}/${spots.length} spot per "${searchRaw}" (prima pagina)`;
+      searchClearButton.hidden = false;
+    } else {
+      listSummary.textContent = listSummaryBase;
+      searchClearButton.hidden = true;
+    }
+
+    if (!filteredSpots.length) {
+      spotList.innerHTML = '<div class="muted">Nessuno spot trovato per i criteri scelti.</div>';
       return;
     }
 
     spotList.innerHTML = '';
 
-    spots.forEach((spot) => {
+    filteredSpots.forEach((spot) => {
       const item = document.createElement('button');
       item.type = 'button';
       item.className = 'spot-item' + (String(spot.id) === String(currentSpotId) ? ' active' : '');
@@ -1031,9 +1118,12 @@
     spotList.innerHTML = '';
 
     try {
-      const data = await request(`/api/admin/spots?status=${encodeURIComponent(currentStatus)}&limit=50&offset=0`);
+      const queryParam = searchQuery ? `&q=${encodeURIComponent(searchQuery)}` : '';
+      const data = await request(`/api/admin/spots?status=${encodeURIComponent(currentStatus)}&limit=50&offset=0${queryParam}`);
       spots = Array.isArray(data.data) ? data.data : [];
-      listSummary.textContent = `${spots.length} spot in stato ${currentStatus}.`;
+      listSummaryBase = searchQuery
+        ? `${spots.length} risultati per "${searchRaw}" in stato ${currentStatus}.`
+        : `${spots.length} spot in stato ${currentStatus}.`;
       renderSpotList();
 
       if (currentSpotId != null && spots.some((spot) => String(spot.id) === String(currentSpotId))) {
@@ -1260,8 +1350,20 @@
     tab.addEventListener('click', async () => {
       currentStatus = tab.dataset.status || 'pending';
       tabs.forEach((item) => item.classList.toggle('active', item === tab));
+      clearSearch();
       await loadSpots();
     });
+  });
+
+  searchInput.addEventListener('input', () => {
+    searchRaw = searchInput.value.trim();
+    searchQuery = searchRaw.toLowerCase();
+    scheduleSearch();
+  });
+
+  searchClearButton.addEventListener('click', () => {
+    clearSearch();
+    loadSpots();
   });
 
   emailInput.addEventListener('keydown', (event) => {
@@ -1279,6 +1381,38 @@
   });
 
   loadSession();
+
+  function getFilteredSpots() {
+    if (!searchQuery) {
+      return spots;
+    }
+
+    return spots.filter((spot) => {
+      const name = (spot.nome || '').toLowerCase();
+      const type = (spot.tipo || '').toLowerCase();
+      return name.includes(searchQuery) || type.includes(searchQuery);
+    });
+  }
+
+  function clearSearch() {
+    searchRaw = '';
+    searchQuery = '';
+    searchInput.value = '';
+    searchClearButton.hidden = true;
+    if (searchDebounce) {
+      clearTimeout(searchDebounce);
+      searchDebounce = null;
+    }
+  }
+
+  function scheduleSearch() {
+    if (searchDebounce) {
+      clearTimeout(searchDebounce);
+    }
+    searchDebounce = setTimeout(() => {
+      loadSpots();
+    }, 350);
+  }
 </script>
 </body>
 </html>
