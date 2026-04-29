@@ -132,8 +132,12 @@
   .screenshots-section { overflow: hidden; }
   .screenshots-track { display: flex; gap: 24px; margin-top: 48px; padding-bottom: 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; justify-content: center; }
   .screenshots-track::-webkit-scrollbar { display: none; }
-  .screenshot-phone { flex-shrink: 0; width: 220px; height: 440px; border-radius: 36px; overflow: hidden; scroll-snap-align: start; }
+  .screenshot-phone { flex-shrink: 0; width: 220px; height: 440px; border-radius: 36px; overflow: hidden; scroll-snap-align: center; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.5; transform: scale(0.9); }
+  .screenshot-phone.active { opacity: 1; transform: scale(1); box-shadow: 0 0 60px rgba(18,104,105,0.4), 0 20px 40px rgba(0,0,0,0.5); }
   .screenshot-phone img { width: 100%; height: 100%; object-fit: cover; }
+  .carousel-dots { display: none; justify-content: center; gap: 8px; margin-top: 24px; }
+  .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; cursor: pointer; }
+  .carousel-dot.active { background: var(--accent-bright); width: 24px; border-radius: 4px; }
   .phone-screen-inner { min-height: 440px; background: #0d1919; padding: 10px; position: relative; overflow: hidden; }
   .screen-enc { background: var(--bg); }
   .enc-header { background: var(--bg2); border-radius: 12px; padding: 12px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
@@ -223,6 +227,9 @@
     nav .nav-left img { width: 80px; height: auto; }
     footer { padding: 40px 24px; }
     .footer-container { grid-template-columns: 1fr; gap: 32px; }
+    .screenshots-track { justify-content: flex-start; padding-left: calc(50% - 110px); padding-right: calc(50% - 110px); }
+    .carousel-dots { display: flex; }
+    .screenshot-phone { width: 260px; height: 520px; }
   }
 </style>
 </head>
@@ -299,6 +306,12 @@
     <div class="screenshot-phone">
       <img src="assets/screenshots/profile.png" alt="Profile">
     </div>
+  </div>
+  <div class="carousel-dots">
+    <div class="carousel-dot active" data-index="0"></div>
+    <div class="carousel-dot" data-index="1"></div>
+    <div class="carousel-dot" data-index="2"></div>
+    <div class="carousel-dot" data-index="3"></div>
   </div>
 </section>
 
@@ -378,7 +391,7 @@ const T = {
     f2t:"Enciclopedia Tricks", f2d:"Lista completa di movimenti con prerequisiti, video tutorial e descrizioni dettagliate. Segna cosa sai fare, cosa stai imparando e cosa hai ancora da scoprire.",
     f3t:"Progress Tracker", f3d:"Registra i tuoi tentativi con video locali. Guarda la tua crescita tecnica nel tempo e mantieni la motivazione con una timeline visiva dei progressi.",
     f6t:"Profilo Atleta", f6d:"Il tuo profilo con statistiche complete: trick completati, spot visitati, rating community. Mostra i tuoi progressi e connettiti con altri atleti.",
-    ss_eye:"App in azione", ss_title:"Progettata per<br>l'atleta moderno", ss_sub:"Un'interfaccia pensata per essere usata sul campo, sotto al sole, con le mani sporche.",
+    ss_eye:"App in azione", ss_title:"Progettata per<br>l'atleta moderno", ss_sub:"Semplice, veloce, sempre pronta all'azione.",
     sc1t:"Enciclopedia", sc1s:"Cerca un trick…",
     lb1:"Base · Salti", lb2:"Intermedio · Vault", lb3:"Avanzato · Flip", lb4:"Base · Arrampicata", lb5:"Base · Vault",
     bd1:"✓ Fatto", bd2:"✓ Fatto", bd3:"✓ Fatto", bw1:"In corso", bt1:"Da fare",
@@ -409,7 +422,7 @@ const T = {
     f2t:"Tricks Encyclopedia", f2d:"Full list of movements with prerequisites, video tutorials and detailed descriptions. Mark what you can do, what you're learning, and what's still ahead.",
     f3t:"Progress Tracker", f3d:"Record your attempts with local videos. Watch your technical growth over time and stay motivated with a visual progress timeline.",
     f6t:"Athlete Profile", f6d:"Your profile with full stats: tricks completed, spots visited, community rating. Show your progress and connect with other athletes.",
-    ss_eye:"App in action", ss_title:"Built for<br>the modern athlete", ss_sub:"An interface designed to be used in the field, in the sun, with dirty hands.",
+    ss_eye:"App in action", ss_title:"Built for<br>the modern athlete", ss_sub:"Simple, fast, always ready for action.",
     sc1t:"Encyclopedia", sc1s:"Search a trick…",
     lb1:"Beginner · Jumps", lb2:"Intermediate · Vault", lb3:"Advanced · Flip", lb4:"Beginner · Climbing", lb5:"Beginner · Vault",
     bd1:"✓ Done", bd2:"✓ Done", bd3:"✓ Done", bw1:"In progress", bt1:"To do",
@@ -452,6 +465,40 @@ function applyLang(l) {
 
 function toggleLang() {
   applyLang(lang === 'it' ? 'en' : 'it');
+}
+
+// ─── Carousel ─────────────────────────────────────────────────────────
+const track = document.querySelector('.screenshots-track');
+const dots = document.querySelectorAll('.carousel-dot');
+const phones = document.querySelectorAll('.screenshot-phone');
+
+if (track && dots.length > 0) {
+  const updateActive = () => {
+    const scrollCenter = track.scrollLeft + track.offsetWidth / 2;
+    phones.forEach((phone, index) => {
+      const phoneCenter = phone.offsetLeft + phone.offsetWidth / 2;
+      if (Math.abs(scrollCenter - phoneCenter) < phone.offsetWidth / 2) {
+        phones.forEach(p => p.classList.remove('active'));
+        phone.classList.add('active');
+        dots.forEach(d => d.classList.remove('active'));
+        dots[index].classList.add('active');
+      }
+    });
+  };
+
+  track.addEventListener('scroll', updateActive);
+  updateActive(); // Initial call
+
+  dots.forEach(dot => {
+    dot.addEventListener('click', () => {
+      const index = parseInt(dot.dataset.index);
+      const phone = phones[index];
+      track.scrollTo({
+        left: phone.offsetLeft - (track.offsetWidth - phone.offsetWidth) / 2,
+        behavior: 'smooth'
+      });
+    });
+  });
 }
 
 // ─── Email Form ─────────────────────────────────────────────────────────
