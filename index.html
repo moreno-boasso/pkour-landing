@@ -132,8 +132,7 @@
   .screenshots-section { overflow: hidden; }
   .screenshots-track { display: flex; gap: 24px; margin-top: 48px; padding-bottom: 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; justify-content: center; }
   .screenshots-track::-webkit-scrollbar { display: none; }
-  .screenshot-phone { flex-shrink: 0; width: 220px; height: 440px; border-radius: 36px; overflow: hidden; scroll-snap-align: center; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.5; transform: scale(0.9); }
-  .screenshot-phone.active { opacity: 1; transform: scale(1); box-shadow: 0 0 60px rgba(18,104,105,0.4), 0 20px 40px rgba(0,0,0,0.5); }
+  .screenshot-phone { flex-shrink: 0; width: 220px; height: 440px; border-radius: 36px; overflow: hidden; scroll-snap-align: center; }
   .screenshot-phone img { width: 100%; height: 100%; object-fit: cover; }
   .carousel-dots { display: none; justify-content: center; gap: 8px; margin-top: 24px; }
   .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; cursor: pointer; }
@@ -227,9 +226,10 @@
     nav .nav-left img { width: 80px; height: auto; }
     footer { padding: 40px 24px; }
     .footer-container { grid-template-columns: 1fr; gap: 32px; }
-    .screenshots-track { justify-content: flex-start; padding-left: calc(50% - 110px); padding-right: calc(50% - 110px); }
+    .screenshots-track { justify-content: flex-start; padding-left: calc(50% - 130px); padding-right: calc(50% - 130px); }
     .carousel-dots { display: flex; }
-    .screenshot-phone { width: 260px; height: 520px; }
+    .screenshot-phone { width: 260px; height: 520px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.5; transform: scale(0.9); }
+    .screenshot-phone.active { opacity: 1; transform: scale(1); }
   }
 </style>
 </head>
