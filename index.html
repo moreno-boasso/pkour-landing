@@ -18,17 +18,19 @@
 <meta property="og:url" content="https://pkour.it/">
 <meta property="og:title" content="PKour - L'app per il Parkour">
 <meta property="og:description" content="Mappa spot, enciclopedia tricks e traccia i progressi. PKour unisce la community parkour in un'unica app.">
-<meta property="og:image" content="https://pkour.it/assets/screenshots/HOME.png">
-<meta property="og:image:width" content="640">
-<meta property="og:image:height" content="1280">
-<meta property="og:image:alt" content="PKour App Home Screen - Mappa spot e funzionalità principali">
-<meta property="og:image:secure_url" content="https://pkour.it/assets/screenshots/HOME.png">
+<meta property="og:image" content="https://pkour.it/favicon.svg">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:image:alt" content="PKour logo">
+<meta property="og:image:secure_url" content="https://pkour.it/favicon.svg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="PKour - L'app per il Parkour">
 <meta name="twitter:description" content="Mappa spot, enciclopedia tricks e traccia i progressi con PKour.">
-<meta name="twitter:image" content="https://pkour.it/assets/screenshots/HOME.png">
-<meta name="twitter:image:alt" content="PKour App Home Screen - Mappa spot e funzionalità principali">
-<link rel="icon" href="assets/icon ryal teal.svg">
+<meta name="twitter:image" content="https://pkour.it/favicon.svg">
+<meta name="twitter:image:alt" content="PKour logo">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="shortcut icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <script type="application/ld+json">
@@ -48,41 +50,14 @@
     "it",
     "en"
   ],
+  "image": "https://pkour.it/favicon.svg",
   "screenshot": [
     {
       "@type": "ImageObject",
-      "url": "https://pkour.it/assets/screenshots/HOME.png",
-      "caption": "PKour App Home Screen - Mappa spot e funzionalità principali",
-      "width": 640,
-      "height": 1280
-    },
-    {
-      "@type": "ImageObject",
-      "url": "https://pkour.it/assets/screenshots/MAP.png",
-      "caption": "PKour App Map Screen - Mappa interattiva degli spot parkour",
-      "width": 640,
-      "height": 1280
-    },
-    {
-      "@type": "ImageObject",
-      "url": "https://pkour.it/assets/screenshots/tricks.png",
-      "caption": "PKour App Tricks Screen - Enciclopedia dei movimenti parkour",
-      "width": 640,
-      "height": 1280
-    },
-    {
-      "@type": "ImageObject",
-      "url": "https://pkour.it/assets/screenshots/video track.png",
-      "caption": "PKour App Video Track Screen - Progress tracker con video",
-      "width": 640,
-      "height": 1280
-    },
-    {
-      "@type": "ImageObject",
-      "url": "https://pkour.it/assets/screenshots/profile.png",
-      "caption": "PKour App Profile Screen - Profilo atleta con statistiche",
-      "width": 640,
-      "height": 1280
+      "url": "https://pkour.it/favicon.svg",
+      "caption": "PKour logo",
+      "width": 512,
+      "height": 512
     }
   ]
 }
@@ -595,9 +570,13 @@ if (track && dots.length > 0) {
   });
 }
 
+// ─── Waitlist config ────────────────────────────────────────────────────
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwCffLed-NUtdg73hPKTT_QQIAz-TX2boc0sihf4BoPItcmQma-NTVbBx0Ma8ebFnqw/exec';
+
 // ─── Email Form ─────────────────────────────────────────────────────────
 async function submitEmail() {
-  const email = document.getElementById('emailInput').value.trim();
+  const input = document.getElementById('emailInput');
+  const email = input.value.trim();
   const msg = document.getElementById('formMsg');
   const btn = document.getElementById('submitBtn');
   
@@ -617,15 +596,44 @@ async function submitEmail() {
   btn.disabled = true;
   msg.textContent = T[lang].form_loading;
   msg.className = 'form-msg info';
-  
-  // Simulate API call
-  setTimeout(() => {
-    msg.textContent = T[lang].form_ok;
-    msg.className = 'form-msg success';
-    btn.disabled = false;
-    document.getElementById('emailInput').value = '';
-  }, 1500);
+
+  const payload = {
+    email,
+    date: new Date().toISOString().split('T')[0],
+    lang: lang.toUpperCase(),
+    source: 'landing'
+  };
+
+  let sentToSheet = false;
+  try {
+    await fetch(GOOGLE_SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    sentToSheet = true;
+  } catch (error) {
+    console.warn('Waitlist submit failed', error);
+  }
+
+  try {
+    const local = JSON.parse(localStorage.getItem('pkour_waitlist') || '[]');
+    if (!local.find((row) => row.email === email)) {
+      local.push(payload);
+      localStorage.setItem('pkour_waitlist', JSON.stringify(local));
+    }
+  } catch (_) {}
+
+  msg.textContent = sentToSheet ? T[lang].form_ok : T[lang].form_err;
+  msg.className = sentToSheet ? 'form-msg success' : 'form-msg error';
+  btn.disabled = false;
+  if (sentToSheet) input.value = '';
 }
+
+document.getElementById('emailInput').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') submitEmail();
+});
 
 // ─── Init ────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
