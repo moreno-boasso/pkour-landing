@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PKour — Eliminazione Account</title>
+  <meta name="description" content="Procedura ufficiale PKour per eliminare account e dati associati.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#126869">
+  <link rel="canonical" href="https://pkour.it/delete-account.html">
+  <link rel="icon" href="assets/icon ryal teal.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #126869;
+      --accent-bright: #1a9a9c;
+      --bg: #080c0c;
+      --bg2: #0d1515;
+      --text: #e8f0f0;
+      --text-dim: #7a9999;
+      --border: rgba(18,104,105,0.2);
+      --glow: rgba(18,104,105,0.35);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      background: linear-gradient(to bottom, rgba(8,12,12,0.96), rgba(8,12,12,0.82));
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-left img { height: 34px; width: auto; }
+    .nav-right { display: flex; gap: 10px; align-items: center; }
+    .lang-btn, .ghost-btn {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text-dim);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 1px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .lang-btn:hover, .ghost-btn:hover {
+      border-color: var(--accent-bright);
+      color: var(--accent-bright);
+      background: rgba(18,104,105,0.1);
+    }
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 36px 20px 72px;
+    }
+    .hero {
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(18,104,105,0.14), rgba(13,21,21,0.94));
+      border-radius: 18px;
+      padding: 28px 24px;
+      margin-bottom: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
+    }
+    .eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--accent-bright);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 1.5px;
+      font-size: clamp(36px, 6vw, 56px);
+      line-height: 1;
+      margin-bottom: 14px;
+    }
+    .subtitle {
+      color: var(--text-dim);
+      max-width: 680px;
+      font-size: 16px;
+    }
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+      background: var(--bg2);
+      margin-bottom: 14px;
+    }
+    h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      letter-spacing: 1px;
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+    ol, ul {
+      margin-left: 18px;
+      color: var(--text-dim);
+    }
+    li { margin-bottom: 8px; }
+    .note {
+      margin-top: 12px;
+      color: var(--text);
+      border-left: 3px solid var(--accent-bright);
+      padding-left: 12px;
+    }
+    .contact {
+      display: inline-flex;
+      margin-top: 8px;
+      color: var(--accent-bright);
+      text-decoration: none;
+    }
+    footer {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 0 20px 28px;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-left">
+      <img src="assets/PKour Logo royal tea;.svg" alt="PKour">
+    </div>
+    <div class="nav-right">
+      <button class="lang-btn" id="langToggle" onclick="toggleLang()">EN</button>
+      <a href="/" class="ghost-btn" data-i18n="back_home">HOME</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow" data-i18n="eyebrow">Supporto account</div>
+      <h1 data-i18n="title">ELIMINAZIONE ACCOUNT</h1>
+      <p class="subtitle" data-i18n="subtitle">
+        Su PKour puoi eliminare il tuo account direttamente dall'app, in modo definitivo.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="how_title">Come eliminare l'account</h2>
+      <ol>
+        <li data-i18n="how_1">Apri l'app PKour e fai login.</li>
+        <li data-i18n="how_2">Vai su Impostazioni.</li>
+        <li data-i18n="how_3">Seleziona "Elimina profilo".</li>
+        <li data-i18n="how_4">Conferma l'operazione nel popup di conferma.</li>
+      </ol>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="data_title">Cosa viene eliminato</h2>
+      <ul>
+        <li data-i18n="data_1">Account di autenticazione (Firebase Auth).</li>
+        <li data-i18n="data_2">Profilo utente e dati account nel database PKour.</li>
+        <li data-i18n="data_3">Dati collegati all'account (progressi, contenuti e riferimenti associati).</li>
+      </ul>
+      <p class="note" data-i18n="data_note">
+        PKour non conserva copie dei dati dopo la cancellazione account.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="timing_title">Tempi e irreversibilita</h2>
+      <p data-i18n="timing_body" style="color: var(--text-dim);">
+        La cancellazione viene eseguita in modo definitivo. Una volta completata, non e possibile recuperare account o dati.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 data-i18n="contact_title">Contatti</h2>
+      <p data-i18n="contact_body" style="color: var(--text-dim);">
+        Se riscontri problemi durante la procedura, contattaci.
+      </p>
+      <a class="contact" href="mailto:support@pkour.it">support@pkour.it</a>
+    </section>
+  </main>
+
+  <footer>
+    <span data-i18n="footer">© 2026 PKour by Moreno Boasso.</span>
+  </footer>
+
+  <script>
+    const T = {
+      it: {
+        back_home: "HOME",
+        eyebrow: "Supporto account",
+        title: "ELIMINAZIONE ACCOUNT",
+        subtitle: "Su PKour puoi eliminare il tuo account direttamente dall'app, in modo definitivo.",
+        how_title: "Come eliminare l'account",
+        how_1: "Apri l'app PKour e fai login.",
+        how_2: "Vai su Impostazioni.",
+        how_3: "Seleziona \"Elimina profilo\".",
+        how_4: "Conferma l'operazione nel popup di conferma.",
+        data_title: "Cosa viene eliminato",
+        data_1: "Account di autenticazione (Firebase Auth).",
+        data_2: "Profilo utente e dati account nel database PKour.",
+        data_3: "Dati collegati all'account (progressi, contenuti e riferimenti associati).",
+        data_note: "PKour non conserva copie dei dati dopo la cancellazione account.",
+        timing_title: "Tempi e irreversibilita",
+        timing_body: "La cancellazione viene eseguita in modo definitivo. Una volta completata, non e possibile recuperare account o dati.",
+        contact_title: "Contatti",
+        contact_body: "Se riscontri problemi durante la procedura, contattaci.",
+        footer: "© 2026 PKour by Moreno Boasso.",
+        doc_title: "PKour — Eliminazione Account",
+        doc_desc: "Procedura ufficiale PKour per eliminare account e dati associati."
+      },
+      en: {
+        back_home: "HOME",
+        eyebrow: "Account support",
+        title: "ACCOUNT DELETION",
+        subtitle: "On PKour you can permanently delete your account directly in the app.",
+        how_title: "How to delete your account",
+        how_1: "Open the PKour app and log in.",
+        how_2: "Go to Settings.",
+        how_3: "Tap \"Delete profile\".",
+        how_4: "Confirm the action in the confirmation popup.",
+        data_title: "What is deleted",
+        data_1: "Authentication account (Firebase Auth).",
+        data_2: "User profile and account data in PKour database.",
+        data_3: "Account-related data (progress, content and linked references).",
+        data_note: "PKour does not retain any data copy after account deletion.",
+        timing_title: "Timing and irreversibility",
+        timing_body: "Deletion is permanent. Once completed, account and data cannot be restored.",
+        contact_title: "Contacts",
+        contact_body: "If you have issues during the process, contact us.",
+        footer: "© 2026 PKour by Moreno Boasso.",
+        doc_title: "PKour — Account Deletion",
+        doc_desc: "Official PKour procedure to delete account and related data."
+      }
+    };
+
+    const browserLang = (navigator.language || "en").toLowerCase();
+    let lang = browserLang.startsWith("it") ? "it" : "en";
+
+    function applyLang(nextLang) {
+      lang = nextLang;
+      const t = T[lang];
+      document.documentElement.lang = lang;
+      document.title = t.doc_title;
+      const metaDescription = document.querySelector('meta[name="description"]');
+      if (metaDescription) metaDescription.setAttribute("content", t.doc_desc);
+
+      document.querySelectorAll("[data-i18n]").forEach((el) => {
+        const key = el.getAttribute("data-i18n");
+        if (t[key] !== undefined) {
+          el.textContent = t[key];
+        }
+      });
+      const toggle = document.getElementById("langToggle");
+      if (toggle) toggle.textContent = lang === "it" ? "EN" : "IT";
+    }
+
+    function toggleLang() {
+      applyLang(lang === "it" ? "en" : "it");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => applyLang(lang));
+  </script>
+</body>
+</html>
