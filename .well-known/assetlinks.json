@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "pkour.it.pkour_fe",
+      "sha256_cert_fingerprints": [
+        "04:B4:3A:68:93:56:41:40:F8:91:65:7F:E8:AC:C9:91:81:D1:24:28:8C:7E:28:22:04:67:F7:08:05:A6:B7:90"
+      ]
+    }
+  }
+]

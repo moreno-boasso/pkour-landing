@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "9W5K8P267N.pkour.it.pkourFe",
+        "paths": ["/spots/*", "/tricks/*"]
+      }
+    ]
+  }
+}

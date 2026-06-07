@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PKour</title>
+<meta name="description" content="Apri in PKour">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#126869">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="PKour">
+<meta property="og:title" content="PKour">
+<meta property="og:description" content="Scopri spot e trick parkour su PKour.">
+<meta property="og:image" content="https://pkour.it/favicon.svg">
+<meta property="og:url" content="https://pkour.it/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --accent: #126869;
+    --accent-bright: #1a9a9c;
+    --bg: #080c0c;
+    --bg2: #0d1515;
+    --text: #e8f0f0;
+    --text-dim: #7a9999;
+    --border: rgba(18,104,105,0.2);
+    --glow: rgba(18,104,105,0.4);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 20px;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(18,104,105,0.18), transparent 55%);
+    pointer-events: none;
+  }
+  .card {
+    width: min(480px, 100%);
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.45);
+    position: relative;
+    z-index: 1;
+  }
+  .cover {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: linear-gradient(135deg, #0d1919, #112828);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .cover-fallback {
+    width: 80px;
+    height: 80px;
+    opacity: 0.85;
+  }
+  .content { padding: 28px 24px 24px; }
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent-bright);
+    margin-bottom: 10px;
+  }
+  .title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    letter-spacing: 1px;
+    line-height: 1.05;
+    margin-bottom: 10px;
+  }
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .actions { display: flex; flex-direction: column; gap: 12px; }
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px 18px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: white;
+  }
+  .btn-primary:hover {
+    background: var(--accent-bright);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px var(--glow);
+  }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { color: var(--text); border-color: var(--accent-bright); }
+  .hint {
+    margin-top: 18px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--text-dim);
+    text-align: center;
+  }
+  .brand {
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0.8;
+  }
+  .brand img { width: 28px; height: 28px; }
+  .brand span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 2px;
+  }
+  .loading {
+    text-align: center;
+    color: var(--text-dim);
+    padding: 48px 24px;
+  }
+  .error {
+    color: #ff8a8a;
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+</style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="loading" id="loading">Caricamento...</div>
+  </div>
+  <div class="brand">
+    <img src="/assets/icon white.svg" alt="PKour">
+    <span>PKOUR</span>
+  </div>
+
+<script>
+const API_BASE = 'https://pkour-be.onrender.com/api';
+
+// TODO(store-release): impostare true e aggiornare gli URL quando l'app è live.
+// Vedi STORE_RELEASE_TODO.md nella root del monorepo.
+const STORES_PUBLISHED = false;
+const APP_STORE_URL = 'https://pkour.it/#download';
+const PLAY_STORE_URL = 'https://pkour.it/#download';
+
+const STRINGS = {
+  it: {
+    spot: 'Spot parkour',
+    trick: 'Trick parkour',
+    open_app: 'Apri in PKour',
+    download_ios: 'Scarica su App Store',
+    download_android: 'Scarica su Google Play',
+    coming_soon: 'App in arrivo — avvisami',
+    spot_desc: 'Scopri questo spot sulla mappa PKour.',
+    trick_desc: 'Studia questo trick nell\'enciclopedia PKour.',
+    not_found: 'Contenuto non trovato.',
+    invalid_link: 'Link non valido.',
+    post_install_hint: 'Dopo aver installato l\'app e fatto login, riapri questo link per aprire il contenuto.',
+    post_install_hint_no_store: 'PKour non è ancora sugli store. Se hai una build di test installata, tocca "Apri in PKour". Altrimenti lascia la email sulla homepage per essere avvisato al lancio.',
+    loading: 'Caricamento...'
+  },
+  en: {
+    spot: 'Parkour spot',
+    trick: 'Parkour trick',
+    open_app: 'Open in PKour',
+    download_ios: 'Download on the App Store',
+    download_android: 'Get it on Google Play',
+    coming_soon: 'App coming soon — notify me',
+    spot_desc: 'Discover this spot on the PKour map.',
+    trick_desc: 'Study this trick in the PKour encyclopedia.',
+    not_found: 'Content not found.',
+    invalid_link: 'Invalid link.',
+    post_install_hint: 'After installing the app and signing in, open this link again to view the content.',
+    post_install_hint_no_store: 'PKour is not on the stores yet. If you have a test build installed, tap "Open in PKour". Otherwise join the waitlist on our homepage.',
+    loading: 'Loading...'
+  }
+};
+
+function lang() {
+  const code = (navigator.language || 'en').slice(0, 2);
+  return STRINGS[code] || STRINGS.en;
+}
+
+function parseSharePath() {
+  const parts = window.location.pathname.split('/').filter(Boolean);
+  if (parts.length !== 2) return null;
+  const [type, id] = parts;
+  if ((type === 'spots' || type === 'tricks') && id) {
+    return { type, id };
+  }
+  return null;
+}
+
+function storePendingPath() {
+  try {
+    localStorage.setItem('pkour_pending_path', window.location.pathname);
+  } catch (_) {}
+}
+
+async function fetchPreview(type, id) {
+  const endpoint = type === 'spots' ? `${API_BASE}/spots/${id}` : `${API_BASE}/tricks/${id}`;
+  const response = await fetch(endpoint);
+  if (!response.ok) throw new Error('not_found');
+  return response.json();
+}
+
+function imageFromData(type, data) {
+  if (type === 'spots') {
+    const photos = data.foto || data.photos || [];
+    if (photos.length > 0) {
+      const first = photos[0];
+      return typeof first === 'string' ? first : first.url;
+    }
+  }
+  return data.thumbnail_url || null;
+}
+
+function renderError(message) {
+  const t = lang();
+  const storeLabel = STORES_PUBLISHED ? t.download_ios : t.coming_soon;
+  const storeUrl = STORES_PUBLISHED ? APP_STORE_URL : 'https://pkour.it/#download';
+  document.getElementById('card').innerHTML = `
+    <div class="content">
+      <p class="error">${message}</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="${storeUrl}">${storeLabel}</a>
+        <a class="btn btn-secondary" href="/">${t.open_app}</a>
+      </div>
+    </div>`;
+}
+
+function renderPreview(type, id, data) {
+  const t = lang();
+  const name = data.nome || data.name || 'PKour';
+  const image = imageFromData(type, data);
+  const eyebrow = type === 'spots' ? t.spot : t.trick;
+  const subtitle = type === 'spots' ? t.spot_desc : t.trick_desc;
+  const deepLink = window.location.href;
+  const isAndroid = /Android/i.test(navigator.userAgent);
+  const storeUrl = STORES_PUBLISHED
+    ? (isAndroid ? PLAY_STORE_URL : APP_STORE_URL)
+    : 'https://pkour.it/#download';
+  const storeLabel = STORES_PUBLISHED
+    ? (isAndroid ? t.download_android : t.download_ios)
+    : t.coming_soon;
+  const hint = STORES_PUBLISHED ? t.post_install_hint : t.post_install_hint_no_store;
+
+  storePendingPath();
+
+  document.getElementById('card').innerHTML = `
+    <div class="cover">
+      ${image
+        ? `<img src="${image}" alt="${name}">`
+        : `<img class="cover-fallback" src="/assets/icon white.svg" alt="PKour">`}
+    </div>
+    <div class="content">
+      <div class="eyebrow">${eyebrow}</div>
+      <h1 class="title">${name}</h1>
+      <p class="subtitle">${subtitle}</p>
+      <div class="actions">
+        <a class="btn btn-primary" id="openBtn" href="${deepLink}">${t.open_app}</a>
+        <a class="btn btn-secondary" id="storeBtn" href="${storeUrl}">${storeLabel}</a>
+      </div>
+      <p class="hint">${hint}</p>
+    </div>`;
+
+  document.getElementById('storeBtn')?.addEventListener('click', () => {
+    storePendingPath();
+    try {
+      navigator.clipboard?.writeText(deepLink);
+    } catch (_) {}
+  });
+}
+
+async function init() {
+  const t = lang();
+  document.getElementById('loading').textContent = t.loading;
+  const parsed = parseSharePath();
+  if (!parsed) {
+    renderError(t.invalid_link);
+    return;
+  }
+  try {
+    const data = await fetchPreview(parsed.type, parsed.id);
+    document.title = `${data.nome || 'PKour'} — PKour`;
+    renderPreview(parsed.type, parsed.id, data);
+  } catch (_) {
+    renderError(t.not_found);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
