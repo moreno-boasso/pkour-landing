@@ -234,7 +234,8 @@ function storePendingPath() {
 }
 
 async function fetchPreview(type, id) {
-  const endpoint = type === 'spots' ? `${API_BASE}/spots/${id}` : `${API_BASE}/tricks/${id}`;
+  const encodedId = encodeURIComponent(id);
+  const endpoint = `${API_BASE}/share/${type}/${encodedId}`;
   const response = await fetch(endpoint);
   if (!response.ok) throw new Error('not_found');
   return response.json();
@@ -242,6 +243,7 @@ async function fetchPreview(type, id) {
 
 function imageFromData(type, data) {
   if (type === 'spots') {
+    if (data.cover_url) return data.cover_url;
     const photos = data.foto || data.photos || [];
     if (photos.length > 0) {
       const first = photos[0];
