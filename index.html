@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PKour — L'app per il Parkour</title>
-<meta name="description" content="PKour e l'app per la community parkour: mappa spot, enciclopedia tricks, progress tracker e profilo atleta in un'unica esperienza.">
+<title>PKour — L'app per trovare Parkour Spot</title>
+<meta name="description" content="PKour è l'app per trovare parkour spot vicino a te: mappa interattiva, enciclopedia tricks, progress tracker e profilo atleta per la community parkour e freerunning.">
+<meta name="keywords" content="parkour spot, parkour app, spot parkour, mappa parkour, PKour, freerunning, traceur">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="author" content="PKour">
 <meta name="theme-color" content="#126869">
@@ -16,16 +17,16 @@
 <meta property="og:site_name" content="PKour">
 <meta property="og:locale" content="it_IT">
 <meta property="og:url" content="https://pkour.it/">
-<meta property="og:title" content="PKour - L'app per il Parkour">
-<meta property="og:description" content="Mappa spot, enciclopedia tricks e traccia i progressi. PKour unisce la community parkour in un'unica app.">
+<meta property="og:title" content="PKour - L'app per trovare Parkour Spot">
+<meta property="og:description" content="Trova parkour spot vicino a te con PKour: mappa interattiva, enciclopedia tricks e progress tracker per la community parkour.">
 <meta property="og:image" content="https://pkour.it/favicon.svg">
 <meta property="og:image:width" content="512">
 <meta property="og:image:height" content="512">
 <meta property="og:image:alt" content="PKour logo">
 <meta property="og:image:secure_url" content="https://pkour.it/favicon.svg">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="PKour - L'app per il Parkour">
-<meta name="twitter:description" content="Mappa spot, enciclopedia tricks e traccia i progressi con PKour.">
+<meta name="twitter:title" content="PKour - L'app per trovare Parkour Spot">
+<meta name="twitter:description" content="Trova parkour spot vicino a te con PKour: mappa interattiva, enciclopedia tricks e progress tracker.">
 <meta name="twitter:image" content="https://pkour.it/favicon.svg">
 <meta name="twitter:image:alt" content="PKour logo">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -36,7 +37,12 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="image" href="assets/screenshots/optimized/HOME-mobile.png" media="(max-width: 900px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/screenshots/optimized/HOME-640.png" media="(min-width: 901px)" fetchpriority="high">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap"></noscript>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -45,7 +51,8 @@
   "applicationCategory": "HealthApplication",
   "operatingSystem": "iOS, Android",
   "url": "https://pkour.it/",
-  "description": "App per parkour e freerunning: mappa spot, enciclopedia tricks, progress tracker e strumenti community.",
+  "description": "App per trovare parkour spot, allenarsi e crescere: mappa spot interattiva, enciclopedia tricks, progress tracker e strumenti community.",
+  "keywords": "parkour spot, parkour app, mappa parkour, freerunning",
   "publisher": {
     "@type": "Organization",
     "name": "PKour"
@@ -82,7 +89,7 @@
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
-  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow-x: hidden; }
   body::before {
     content: '';
     position: fixed; inset: 0;
@@ -129,7 +136,8 @@
   .hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(18,104,105,0.15) 0%, transparent 70%); pointer-events: none; }
   .hero::after { content: ''; position: absolute; bottom: -100px; left: 20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(18,104,105,0.08) 0%, transparent 70%); pointer-events: none; }
   .hero-eyebrow { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--accent-bright); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
-  .hero-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px, 7vw, 96px); line-height: 0.95; letter-spacing: 2px; margin-bottom: 24px; }
+  .hero-title { font-family: 'Bebas Neue', Impact, 'Arial Narrow Bold', sans-serif; font-size: clamp(56px, 7vw, 96px); line-height: 0.95; letter-spacing: 2px; margin-bottom: 24px; }
+  .hero-screenshot { width: 320px; max-width: 100%; height: auto; border-radius: 44px; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
   .hero-title .accent-line { color: var(--accent-bright); display: block; }
   .hero-desc { font-size: 17px; line-height: 1.7; color: var(--text-dim); max-width: 480px; margin-bottom: 40px; }
   .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
@@ -183,15 +191,16 @@
   .feature-card:hover::before { opacity: 1; }
   .feature-icon { width: 52px; height: 52px; background: rgba(18,104,105,0.15); border: 1px solid rgba(18,104,105,0.3); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-bottom: 24px; }
   .feature-num { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 10px; }
-  .feature-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1px; margin-bottom: 12px; color: var(--text); }
+  .feature-title { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 1px; margin-bottom: 12px; color: var(--text); font-weight: normal; }
   .feature-desc { font-size: 14px; line-height: 1.7; color: var(--text-dim); }
 
   /* SCREENSHOTS */
-  .screenshots-section { overflow: hidden; }
+  .screenshots-section { overflow: hidden; content-visibility: auto; contain-intrinsic-size: auto 600px; }
+  .features-section, .seo-section, .how-section, .cta-section, footer { content-visibility: auto; contain-intrinsic-size: auto 500px; }
   .screenshots-track { display: flex; gap: 24px; margin-top: 48px; padding-bottom: 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; justify-content: center; }
   .screenshots-track::-webkit-scrollbar { display: none; }
-  .screenshot-phone { flex-shrink: 0; width: 220px; height: 440px; border-radius: 36px; overflow: hidden; scroll-snap-align: center; }
-  .screenshot-phone img { width: 100%; height: 100%; object-fit: cover; }
+  .screenshot-phone { flex-shrink: 0; width: 220px; height: 440px; scroll-snap-align: center; background: transparent; }
+  .screenshot-phone img { width: 100%; height: 100%; object-fit: contain; object-position: center; }
   .carousel-dots { display: none; justify-content: center; gap: 8px; margin-top: 24px; }
   .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; cursor: pointer; }
   .carousel-dot.active { background: var(--accent-bright); width: 24px; border-radius: 4px; }
@@ -230,7 +239,7 @@
   .steps-row::before { content: ''; position: absolute; top: 28px; left: 10%; right: 10%; height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
   .step { text-align: center; position: relative; }
   .step-num { width: 56px; height: 56px; background: var(--bg3); border: 2px solid var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--accent-bright); margin: 0 auto 24px; position: relative; z-index: 1; box-shadow: 0 0 24px rgba(18,104,105,0.3); }
-  .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; margin-bottom: 10px; }
+  .step-title { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 1px; margin-bottom: 10px; font-weight: normal; }
   .step-desc { font-size: 14px; color: var(--text-dim); line-height: 1.6; }
 
   /* CTA */
@@ -258,7 +267,16 @@
   .footer-brand-col { display: flex; flex-direction: column; gap: 16px; }
   .footer-tagline { font-size: 14px; color: var(--text-dim); line-height: 1.6; max-width: 280px; }
   .footer-links-col, .footer-contact-col { display: flex; flex-direction: column; gap: 12px; }
-  .footer-heading { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; color: var(--text); margin-bottom: 4px; }
+  .footer-heading { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; color: var(--text); margin-bottom: 4px; font-weight: normal; }
+
+  /* SEO CONTENT */
+  .seo-section {
+    background: var(--bg); border-top: 1px solid var(--border);
+    display: grid; grid-template-columns: 1fr 1.2fr; gap: 60px 80px; align-items: start;
+  }
+  .seo-header .section-title { margin-bottom: 0; }
+  .seo-content p { font-size: 15px; line-height: 1.8; color: var(--text-dim); margin-bottom: 16px; }
+  .seo-content p:last-child { margin-bottom: 0; }
   .footer-link { color: var(--text-dim); text-decoration: none; font-size: 14px; transition: color 0.2s; }
   .footer-link:hover { color: var(--accent-bright); }
   .footer-bottom { border-top: 1px solid var(--border); padding-top: 24px; }
@@ -284,6 +302,7 @@
     nav .nav-left img { width: 80px; height: auto; }
     footer { padding: 40px 24px; }
     .footer-container { grid-template-columns: 1fr; gap: 32px; }
+    .seo-section { grid-template-columns: 1fr; gap: 32px; }
     .screenshots-track { justify-content: flex-start; padding-left: calc(50% - 130px); padding-right: calc(50% - 130px); }
     .carousel-dots { display: flex; }
     .screenshot-phone { width: 260px; height: 520px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0.5; transform: scale(0.9); }
@@ -295,11 +314,11 @@
 
 <nav>
   <div class="nav-left">
-    <img src="assets/PKour Logo royal tea;.svg" alt="PKour" width="140" height="40">
+    <img src="assets/PKour Logo royal tea;.svg" alt="PKour" width="140" height="40" decoding="async">
   </div>
   <div class="nav-right">
     <button class="lang-btn" id="langToggle" onclick="toggleLang()">EN</button>
-    <a href="#download" class="nav-cta">
+    <a href="#download" class="nav-cta" title="Scarica l'app PKour" data-i18n-title="link_download">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-right:6px;"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       DOWNLOAD
     </a>
@@ -314,13 +333,13 @@
       <span data-i18n="hero_t2">PARKOUR</span><br>
       <span class="accent-line" data-i18n="hero_t3">IN UN'APP</span>
     </h1>
-    <p class="hero-desc animate-up delay-3" data-i18n="hero_desc">Mappa gli spot, studia i movimenti, traccia i tuoi progressi e allenati con la community. PKour è l'app definitiva per la community del parkour e freerunning.</p>
+    <p class="hero-desc animate-up delay-3" data-i18n="hero_desc">PKour è l'app per trovare parkour spot, studiare i movimenti e tracciare i progressi con la community. La piattaforma definitiva per chi pratica parkour e freerunning.</p>
     <div class="hero-actions animate-up delay-4">
-      <a href="#download" class="btn-primary">
+      <a href="#download" class="btn-primary" title="Scarica gratis l'app PKour" data-i18n-title="link_download_free">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span data-i18n="hero_cta">Download Gratis</span>
       </a>
-      <a href="#features" class="btn-ghost"><span data-i18n="hero_cta2">Scopri le feature</span> →</a>
+      <a href="#features" class="btn-ghost" title="Scopri le funzionalità di PKour" data-i18n-title="link_features"><span data-i18n="hero_cta2">Scopri le feature</span> →</a>
     </div>
     <div class="hero-stats animate-up delay-4">
       <div class="stat-item"><span class="stat-num">200+</span><span class="stat-label" data-i18n="s_tricks">Tricks</span></div>
@@ -330,7 +349,10 @@
   <div class="hero-phone">
     <div class="phone-wrapper">
       <div class="phone-glow"></div>
-      <img src="assets/screenshots/HOME.png" alt="PKour Home" style="width:320px;border-radius:44px;box-shadow:0 40px 80px rgba(0,0,0,0.8);">
+      <picture>
+        <source media="(max-width: 900px)" srcset="assets/screenshots/optimized/HOME-mobile.png" type="image/png">
+        <img src="assets/screenshots/optimized/HOME-640.png" alt="PKour app home screen" class="hero-screenshot" width="320" height="655" decoding="async" fetchpriority="high">
+      </picture>
     </div>
   </div>
 </section>
@@ -340,10 +362,22 @@
   <h2 class="section-title" data-i18n="feat_title">Ogni strumento<br>che ti serve</h2>
   <p class="section-sub" data-i18n="feat_sub">Da atleta principiante a traceur esperto, PKour cresce con te.</p>
   <div class="features-grid">
-    <div class="feature-card"><div class="feature-num">01</div><div class="feature-icon">🗺️</div><div class="feature-title" data-i18n="f1t">Mappa Spot</div><p class="feature-desc" data-i18n="f1d">Esplora spot reali su mappa interattiva. Aggiungi nuovi spot, vota qualità e sicurezza, segnala problemi. Trova sempre dove allenarti vicino a te.</p></div>
-    <div class="feature-card"><div class="feature-num">02</div><div class="feature-icon">📚</div><div class="feature-title" data-i18n="f2t">Enciclopedia Tricks</div><p class="feature-desc" data-i18n="f2d">Lista completa di movimenti con prerequisiti, video tutorial e descrizioni dettagliate. Segna cosa sai fare, cosa stai imparando e cosa hai ancora da scoprire.</p></div>
-    <div class="feature-card"><div class="feature-num">03</div><div class="feature-icon">🎥</div><div class="feature-title" data-i18n="f3t">Progress Tracker</div><p class="feature-desc" data-i18n="f3d">Registra i tuoi tentativi con video locali. Guarda la tua crescita tecnica nel tempo e mantieni la motivazione con una timeline visiva dei progressi.</p></div>
-    <div class="feature-card"><div class="feature-num">04</div><div class="feature-icon">👤</div><div class="feature-title" data-i18n="f6t">Profilo Atleta</div><p class="feature-desc" data-i18n="f6d">Il tuo profilo con statistiche complete: trick completati, spot visitati, rating community. Mostra i tuoi progressi e connettiti con altri atleti.</p></div>
+    <div class="feature-card"><div class="feature-num">01</div><div class="feature-icon">🗺️</div><h3 class="feature-title" data-i18n="f1t">Mappa Spot</h3><p class="feature-desc" data-i18n="f1d">Esplora parkour spot reali su mappa interattiva. Aggiungi nuovi spot, vota qualità e sicurezza, segnala problemi. Trova sempre dove allenarti vicino a te.</p></div>
+    <div class="feature-card"><div class="feature-num">02</div><div class="feature-icon">📚</div><h3 class="feature-title" data-i18n="f2t">Enciclopedia Tricks</h3><p class="feature-desc" data-i18n="f2d">Lista completa di movimenti con prerequisiti, video tutorial e descrizioni dettagliate. Segna cosa sai fare, cosa stai imparando e cosa hai ancora da scoprire.</p></div>
+    <div class="feature-card"><div class="feature-num">03</div><div class="feature-icon">🎥</div><h3 class="feature-title" data-i18n="f3t">Progress Tracker</h3><p class="feature-desc" data-i18n="f3d">Registra i tuoi tentativi con video locali. Guarda la tua crescita tecnica nel tempo e mantieni la motivazione con una timeline visiva dei progressi.</p></div>
+    <div class="feature-card"><div class="feature-num">04</div><div class="feature-icon">👤</div><h3 class="feature-title" data-i18n="f6t">Profilo Atleta</h3><p class="feature-desc" data-i18n="f6d">Il tuo profilo con statistiche complete: trick completati, spot visitati, rating community. Mostra i tuoi progressi e connettiti con altri atleti.</p></div>
+  </div>
+</section>
+
+<section class="seo-section" id="parkour-spot">
+  <div class="seo-header">
+    <div class="section-eyebrow" data-i18n="seo_eye">Parkour Spot</div>
+    <h2 class="section-title" data-i18n="seo_title">Trova i migliori<br>parkour spot</h2>
+  </div>
+  <div class="seo-content">
+    <p data-i18n="seo_p1">Cercare un parkour spot affidabile non è mai stato così semplice. Con PKour, l'app dedicata alla community parkour, puoi scoprire spot verificati dalla community, leggere recensioni su qualità e sicurezza, e aggiungere nuovi luoghi dove allenarti.</p>
+    <p data-i18n="seo_p2">Ogni parkour spot sulla mappa include informazioni utili: tipo di ostacoli, livello di difficoltà, stato del terreno e feedback di altri traceur. Che tu sia alle prime armi o un atleta esperto, troverai sempre lo spot giusto vicino a te.</p>
+    <p data-i18n="seo_p3">PKour unisce la ricerca di parkour spot con strumenti completi per il tuo allenamento: enciclopedia tricks, progress tracker e profilo atleta. Scarica l'app e inizia a esplorare la mappa degli spot parkour nella tua città.</p>
   </div>
 </section>
 
@@ -353,16 +387,16 @@
   <p class="section-sub" data-i18n="ss_sub">Un'interfaccia pensata per essere usata sul campo, sotto al sole, con le mani sporche.</p>
   <div class="screenshots-track">
     <div class="screenshot-phone">
-      <img src="assets/screenshots/MAP.png" alt="Map">
+      <img src="assets/screenshots/optimized/MAP-mobile.png" srcset="assets/screenshots/optimized/MAP-mobile.png 520w, assets/screenshots/optimized/MAP-640.png 640w" sizes="260px" alt="PKour parkour spot map" width="260" height="531" loading="lazy" decoding="async">
     </div>
     <div class="screenshot-phone">
-      <img src="assets/screenshots/tricks.png" alt="Tricks">
+      <img src="assets/screenshots/optimized/tricks-mobile.png" srcset="assets/screenshots/optimized/tricks-mobile.png 520w, assets/screenshots/optimized/tricks-640.png 640w" sizes="260px" alt="PKour tricks encyclopedia" width="260" height="531" loading="lazy" decoding="async">
     </div>
     <div class="screenshot-phone">
-      <img src="assets/screenshots/video track.png" alt="Video Track">
+      <img src="assets/screenshots/optimized/video-track-mobile.png" srcset="assets/screenshots/optimized/video-track-mobile.png 520w, assets/screenshots/optimized/video-track-640.png 640w" sizes="260px" alt="PKour progress tracker" width="260" height="531" loading="lazy" decoding="async">
     </div>
     <div class="screenshot-phone">
-      <img src="assets/screenshots/profile.png" alt="Profile">
+      <img src="assets/screenshots/optimized/profile-mobile.png" srcset="assets/screenshots/optimized/profile-mobile.png 520w, assets/screenshots/optimized/profile-640.png 640w" sizes="260px" alt="PKour athlete profile" width="260" height="531" loading="lazy" decoding="async">
     </div>
   </div>
   <div class="carousel-dots">
@@ -377,16 +411,16 @@
   <div class="section-eyebrow" data-i18n="how_eye">Come funziona</div>
   <h2 class="section-title" data-i18n="how_title">Tre passi per<br>iniziare</h2>
   <div class="steps-row" style="margin-top:60px;">
-    <div class="step"><div class="step-num">1</div><div class="step-title" data-i18n="st1t">Scarica e crea il profilo</div><p class="step-desc" data-i18n="st1d">Registrati, inserisci il tuo livello e seleziona i trick che già conosci. PKour impara da te.</p></div>
-    <div class="step"><div class="step-num">2</div><div class="step-title" data-i18n="st2t">Esplora l'enciclopedia</div><p class="step-desc" data-i18n="st2d">Sfoglia centinaia di movimenti, guarda i tutorial, impara i prerequisiti e traccia i tuoi progressi con video personali.</p></div>
-    <div class="step"><div class="step-num">3</div><div class="step-title" data-i18n="st3t">Vai allo spot</div><p class="step-desc" data-i18n="st3d">Trova spot vicini, allenati e poi segnala, vota e aggiungi nuovi spot per la community.</p></div>
+    <div class="step"><div class="step-num">1</div><h3 class="step-title" data-i18n="st1t">Scarica e crea il profilo</h3><p class="step-desc" data-i18n="st1d">Registrati, inserisci il tuo livello e seleziona i trick che già conosci. PKour impara da te.</p></div>
+    <div class="step"><div class="step-num">2</div><h3 class="step-title" data-i18n="st2t">Esplora l'enciclopedia</h3><p class="step-desc" data-i18n="st2d">Sfoglia centinaia di movimenti, guarda i tutorial, impara i prerequisiti e traccia i tuoi progressi con video personali.</p></div>
+    <div class="step"><div class="step-num">3</div><h3 class="step-title" data-i18n="st3t">Vai allo spot</h3><p class="step-desc" data-i18n="st3d">Trova parkour spot vicini, allenati e poi segnala, vota e aggiungi nuovi spot per la community.</p></div>
   </div>
 </section>
 
 <section class="cta-section" id="download">
   <div class="cta-big-text">PKOUR</div>
   <div class="cta-content">
-    <img src="assets/icon white.svg" alt="PKour" width="80" height="80" style="margin-bottom:32px;">
+    <img src="assets/icon white.svg" alt="PKour" width="80" height="80" style="margin-bottom:32px;" loading="lazy" decoding="async">
     <h2 class="cta-title" data-i18n="cta_title">Pronto a salire<br>di livello?</h2>
     <p class="cta-sub" data-i18n="cta_sub">PKour è in sviluppo. Lascia la tua email per essere il primo a provarlo quando uscirà.</p>
     <div class="email-form">
@@ -402,25 +436,25 @@
 <footer>
   <div class="footer-container">
     <div class="footer-brand-col">
-      <img src="assets/PKour Logo white.svg" alt="PKour" width="140" height="40">
-      <p class="footer-tagline" data-i18n="footer_tagline">L'app definitiva per la community del parkour.</p>
+      <img src="assets/PKour Logo white.svg" alt="PKour" width="140" height="40" loading="lazy" decoding="async">
+      <p class="footer-tagline" data-i18n="footer_tagline">L'app per trovare parkour spot e allenarti con la community.</p>
     </div>
     <div class="footer-links-col">
-      <h4 class="footer-heading" data-i18n="footer_legal">Legal</h4>
-      <a href="privacy-policy.html" class="footer-link" data-i18n="footer_privacy">Privacy Policy</a>
-      <a href="terms-conditions.html" class="footer-link" data-i18n="footer_terms">Terms of Service</a>
-      <a href="delete-account.html" class="footer-link" data-i18n="footer_delete">Delete Account</a>
+      <h3 class="footer-heading" data-i18n="footer_legal">Legal</h3>
+      <a href="privacy-policy.html" class="footer-link" title="Leggi la Privacy Policy di PKour" data-i18n-title="link_privacy" data-i18n="footer_privacy">Privacy Policy</a>
+      <a href="terms-conditions.html" class="footer-link" title="Leggi i Termini di Servizio di PKour" data-i18n-title="link_terms" data-i18n="footer_terms">Terms of Service</a>
+      <a href="delete-account.html" class="footer-link" title="Richiedi l'eliminazione del tuo account PKour" data-i18n-title="link_delete" data-i18n="footer_delete">Delete Account</a>
     </div>
     <div class="footer-contact-col">
-      <h4 class="footer-heading" data-i18n="footer_contact">Contact</h4>
-      <a href="mailto:support@pkour.it" class="footer-link" style="display: flex; align-items: center; gap: 8px;">
+      <h3 class="footer-heading" data-i18n="footer_contact">Contact</h3>
+      <a href="mailto:support@pkour.it" class="footer-link" title="Contatta il supporto PKour via email" data-i18n-title="link_email" style="display: flex; align-items: center; gap: 8px;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
           <polyline points="22,6 12,13 2,6"></polyline>
         </svg>
         support@pkour.it
       </a>
-      <a href="https://instagram.com/pkour.app" target="_blank" class="footer-link" style="display: flex; align-items: center; gap: 8px;">
+      <a href="https://instagram.com/pkour.app" target="_blank" rel="noopener noreferrer" class="footer-link" title="Segui PKour su Instagram" data-i18n-title="link_instagram" style="display: flex; align-items: center; gap: 8px;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -435,18 +469,26 @@
   </div>
 </footer>
 
-<script>
+<script defer>
 // ─── Translations ─────────────────────────────────────────────────────────
 const T = {
   it: {
     nav_cta:"Download", hero_eyebrow:"Il tuo compagno di allenamento",
     hero_t1:"TUTTO IL", hero_t2:"PARKOUR", hero_t3:"IN UN'APP",
-    hero_desc:"Mappa gli spot, studia i movimenti, traccia i tuoi progressi e allenati con la community. PKour è l'app definitiva per la community del parkour e freerunning.",
+    hero_desc:"PKour è l'app per trovare parkour spot, studiare i movimenti e tracciare i progressi con la community. La piattaforma definitiva per chi pratica parkour e freerunning.",
     hero_cta:"Download Gratis", hero_cta2:"Scopri le feature",
+    link_download:"Scarica l'app PKour", link_download_free:"Scarica gratis l'app PKour",
+    link_features:"Scopri le funzionalità di PKour", link_privacy:"Leggi la Privacy Policy di PKour",
+    link_terms:"Leggi i Termini di Servizio di PKour", link_delete:"Richiedi l'eliminazione del tuo account PKour",
+    link_email:"Contatta il supporto PKour via email", link_instagram:"Segui PKour su Instagram",
     s_tricks:"Tricks", s_spots:"Spots", s_coach:"Social",
     map_near:"Spot Vicino a Te", map_sub:"2 spot nelle vicinanze · Torino",
     feat_eye:"Feature", feat_title:"Ogni strumento<br>che ti serve", feat_sub:"Da atleta principiante a traceur esperto, PKour cresce con te.",
-    f1t:"Mappa Spot", f1d:"Esplora spot reali su mappa interattiva. Aggiungi nuovi spot, vota qualità e sicurezza, segnala problemi. Trova sempre dove allenarti vicino a te.",
+    f1t:"Mappa Spot", f1d:"Esplora parkour spot reali su mappa interattiva. Aggiungi nuovi spot, vota qualità e sicurezza, segnala problemi. Trova sempre dove allenarti vicino a te.",
+    seo_eye:"Parkour Spot", seo_title:"Trova i migliori<br>parkour spot",
+    seo_p1:"Cercare un parkour spot affidabile non è mai stato così semplice. Con PKour, l'app dedicata alla community parkour, puoi scoprire spot verificati dalla community, leggere recensioni su qualità e sicurezza, e aggiungere nuovi luoghi dove allenarti.",
+    seo_p2:"Ogni parkour spot sulla mappa include informazioni utili: tipo di ostacoli, livello di difficoltà, stato del terreno e feedback di altri traceur. Che tu sia alle prime armi o un atleta esperto, troverai sempre lo spot giusto vicino a te.",
+    seo_p3:"PKour unisce la ricerca di parkour spot con strumenti completi per il tuo allenamento: enciclopedia tricks, progress tracker e profilo atleta. Scarica l'app e inizia a esplorare la mappa degli spot parkour nella tua città.",
     f2t:"Enciclopedia Tricks", f2d:"Lista completa di movimenti con prerequisiti, video tutorial e descrizioni dettagliate. Segna cosa sai fare, cosa stai imparando e cosa hai ancora da scoprire.",
     f3t:"Progress Tracker", f3d:"Registra i tuoi tentativi con video locali. Guarda la tua crescita tecnica nel tempo e mantieni la motivazione con una timeline visiva dei progressi.",
     f6t:"Profilo Atleta", f6d:"Il tuo profilo con statistiche complete: trick completati, spot visitati, rating community. Mostra i tuoi progressi e connettiti con altri atleti.",
@@ -459,26 +501,34 @@ const T = {
     how_eye:"Come funziona", how_title:"Tre passi per<br>iniziare",
     st1t:"Scarica e crea il profilo", st1d:"Registrati, inserisci il tuo livello e seleziona i trick che già conosci. PKour impara da te.",
     st2t:"Esplora l'enciclopedia", st2d:"Sfoglia centinaia di movimenti, guarda i tutorial, impara i prerequisiti e traccia i tuoi progressi con video personali.",
-    st3t:"Vai allo spot", st3d:"Trova spot vicini, allenati e poi segnala, vota e aggiungi nuovi spot per la community.",
+    st3t:"Vai allo spot", st3d:"Trova parkour spot vicini, allenati e poi segnala, vota e aggiungi nuovi spot per la community.",
     cta_title:"Pronto a salire<br>di livello?", cta_sub:"PKour è in sviluppo. Iscriviti alla lista di beta testing per provare l'app prima di tutti.",
     cta_btn:"Iscriviti alla Beta", ep:"la-tua@email.com",
     form_note:"Niente spam. Solo accesso esclusivo alla beta testing.",
     form_ok:"✓ Perfetto! Ti aggiungiamo alla beta testing.", form_err:"Qualcosa è andato storto. Riprova.", form_inv:"Inserisci un'email valida.", form_loading:"Iscrizione in corso…",
-    footer_tagline:"L'app definitiva per la community del parkour.",
+    footer_tagline:"L'app per trovare parkour spot e allenarti con la community.",
     footer_legal:"Legal", footer_privacy:"Privacy Policy", footer_terms:"Terms of Service", footer_delete:"Elimina account", footer_contact:"Contact",
     footer:"© 2026 PKour by Moreno Boasso.",
-    doc_title:"PKour — L'app per il Parkour",
-    doc_desc:"PKour e l'app per la community parkour: mappa spot, enciclopedia tricks, progress tracker e profilo atleta in un'unica esperienza."
+    doc_title:"PKour — L'app per trovare Parkour Spot",
+    doc_desc:"PKour è l'app per trovare parkour spot vicino a te: mappa interattiva, enciclopedia tricks, progress tracker e profilo atleta per la community parkour e freerunning."
   },
   en: {
     nav_cta:"Download", hero_eyebrow:"Your training companion",
     hero_t1:"ALL OF", hero_t2:"PARKOUR", hero_t3:"IN ONE APP",
-    hero_desc:"Map spots, study movements, track your progress and train with the community. PKour is the ultimate app for the parkour and freerunning community.",
+    hero_desc:"PKour is the app to find parkour spots, study movements and track progress with the community. The ultimate platform for parkour and freerunning athletes.",
     hero_cta:"Free Download", hero_cta2:"Explore features",
+    link_download:"Download the PKour app", link_download_free:"Download PKour for free",
+    link_features:"Discover PKour features", link_privacy:"Read PKour Privacy Policy",
+    link_terms:"Read PKour Terms of Service", link_delete:"Request deletion of your PKour account",
+    link_email:"Contact PKour support via email", link_instagram:"Follow PKour on Instagram",
     s_tricks:"Tricks", s_spots:"Spots", s_coach:"Social",
     map_near:"Spots Near You", map_sub:"2 spots nearby · Turin",
     feat_eye:"Features", feat_title:"Every tool<br>you need", feat_sub:"From beginner athlete to expert traceur, PKour grows with you.",
-    f1t:"Spot Map", f1d:"Explore real spots on an interactive map. Add new spots, rate quality and safety, report issues. Always know where to train near you.",
+    f1t:"Spot Map", f1d:"Explore real parkour spots on an interactive map. Add new spots, rate quality and safety, report issues. Always know where to train near you.",
+    seo_eye:"Parkour Spots", seo_title:"Find the best<br>parkour spots",
+    seo_p1:"Finding a reliable parkour spot has never been easier. With PKour, the app built for the parkour community, you can discover community-verified spots, read reviews on quality and safety, and add new places to train.",
+    seo_p2:"Every parkour spot on the map includes useful details: obstacle types, difficulty level, ground conditions and feedback from other traceurs. Whether you're a beginner or an experienced athlete, you'll always find the right spot near you.",
+    seo_p3:"PKour combines parkour spot discovery with complete training tools: tricks encyclopedia, progress tracker and athlete profile. Download the app and start exploring the parkour spot map in your city.",
     f2t:"Tricks Encyclopedia", f2d:"Full list of movements with prerequisites, video tutorials and detailed descriptions. Mark what you can do, what you're learning, and what's still ahead.",
     f3t:"Progress Tracker", f3d:"Record your attempts with local videos. Watch your technical growth over time and stay motivated with a visual progress timeline.",
     f6t:"Athlete Profile", f6d:"Your profile with full stats: tricks completed, spots visited, community rating. Show your progress and connect with other athletes.",
@@ -491,16 +541,16 @@ const T = {
     how_eye:"How it works", how_title:"Three steps<br>to get started",
     st1t:"Download & create profile", st1d:"Sign up, set your level and select the tricks you already know. PKour learns from you.",
     st2t:"Explore the encyclopedia", st2d:"Browse hundreds of movements, watch tutorials, learn prerequisites and track progress with personal videos.",
-    st3t:"Go to the spot", st3d:"Find nearby spots, train and then report, rate and add new spots for the community.",
+    st3t:"Go to the spot", st3d:"Find nearby parkour spots, train and then report, rate and add new spots for the community.",
     cta_title:"Ready to level<br>up?", cta_sub:"PKour is in development. Join the beta testing list to try the app before everyone else.",
     cta_btn:"Join Beta", ep:"your@email.com",
     form_note:"No spam. Just exclusive access to beta testing.",
     form_ok:"✓ Perfect! We'll add you to the beta testing.", form_err:"Something went wrong. Please try again.", form_inv:"Please enter a valid email.", form_loading:"Signing up…",
-    footer_tagline:"The ultimate app for the parkour community.",
+    footer_tagline:"The app to find parkour spots and train with the community.",
     footer_legal:"Legal", footer_privacy:"Privacy Policy", footer_terms:"Terms of Service", footer_delete:"Delete Account", footer_contact:"Contact",
     footer:"© 2026 PKour by Moreno Boasso.",
-    doc_title:"PKour — The Parkour App",
-    doc_desc:"PKour is the parkour community app: map spots, learn tricks and track progress in one place."
+    doc_title:"PKour — The App to Find Parkour Spots",
+    doc_desc:"PKour is the app to find parkour spots near you: interactive map, tricks encyclopedia, progress tracker and athlete profile for the parkour community."
   }
 };
 
@@ -533,6 +583,10 @@ function applyLang(l) {
     const k = el.getAttribute('data-i18n-ph');
     if (t[k] !== undefined) el.placeholder = t[k];
   });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => {
+    const k = el.getAttribute('data-i18n-title');
+    if (t[k] !== undefined) el.title = t[k];
+  });
   document.getElementById('langToggle').textContent = l === 'it' ? 'EN' : 'IT';
 }
 
@@ -545,7 +599,8 @@ const track = document.querySelector('.screenshots-track');
 const dots = document.querySelectorAll('.carousel-dot');
 const phones = document.querySelectorAll('.screenshot-phone');
 
-if (track && dots.length > 0) {
+function initCarousel() {
+  if (!track || dots.length === 0) return;
   const updateActive = () => {
     const scrollCenter = track.scrollLeft + track.offsetWidth / 2;
     phones.forEach((phone, index) => {
@@ -559,8 +614,8 @@ if (track && dots.length > 0) {
     });
   };
 
-  track.addEventListener('scroll', updateActive);
-  updateActive(); // Initial call
+  track.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
 
   dots.forEach(dot => {
     dot.addEventListener('click', () => {
@@ -642,6 +697,11 @@ document.getElementById('emailInput').addEventListener('keydown', (event) => {
 // ─── Init ────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   applyLang(lang);
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(initCarousel, { timeout: 2000 });
+  } else {
+    setTimeout(initCarousel, 1);
+  }
 });
 </script>
 
