@@ -233,6 +233,28 @@ function storePendingPath() {
   } catch (_) {}
 }
 
+function openInApp(type, id) {
+  storePendingPath();
+  const path = `/${type}/${id}`;
+  const httpsUrl = `https://pkour.it${path}`;
+  const customUrl = `pkour://pkour.it${path}`;
+  const isAndroid = /Android/i.test(navigator.userAgent);
+
+  if (isAndroid) {
+    window.location.href =
+      `intent://pkour.it${path}#Intent;scheme=https;package=pkour.it.pkour_fe;end`;
+    setTimeout(() => {
+      window.location.href = customUrl;
+    }, 400);
+    return;
+  }
+
+  window.location.href = customUrl;
+  setTimeout(() => {
+    window.location.href = httpsUrl;
+  }, 600);
+}
+
 async function fetchPreview(type, id) {
   const encodedId = encodeURIComponent(id);
   const endpoint = `${API_BASE}/share/${type}/${encodedId}`;
@@ -296,11 +318,15 @@ function renderPreview(type, id, data) {
       <h1 class="title">${name}</h1>
       <p class="subtitle">${subtitle}</p>
       <div class="actions">
-        <a class="btn btn-primary" id="openBtn" href="${deepLink}">${t.open_app}</a>
+        <button type="button" class="btn btn-primary" id="openBtn">${t.open_app}</button>
         <a class="btn btn-secondary" id="storeBtn" href="${storeUrl}">${storeLabel}</a>
       </div>
       <p class="hint">${hint}</p>
     </div>`;
+
+  document.getElementById('openBtn')?.addEventListener('click', () => {
+    openInApp(type, id);
+  });
 
   document.getElementById('storeBtn')?.addEventListener('click', () => {
     storePendingPath();

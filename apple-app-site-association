@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "PCFC53Q574.it.pkour.pkour",
+        "paths": ["/spots/*", "/tricks/*"]
+      }
+    ]
+  }
+}
