@@ -38,8 +38,8 @@
 <link rel="icon" href="/favicon.ico" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preload" as="image" href="assets/screenshots/optimized/HOME-mobile.png" media="(max-width: 900px)" fetchpriority="high">
-<link rel="preload" as="image" href="assets/screenshots/optimized/HOME-640.png" media="(min-width: 901px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/screenshots/optimized/HOME-mobile.webp" type="image/webp" media="(max-width: 900px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/screenshots/optimized/HOME-640.webp" type="image/webp" media="(min-width: 901px)" fetchpriority="high">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" media="print" onload="this.media='all'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap"></noscript>
@@ -83,7 +83,7 @@
     --bg3: #111e1e;
     --text: #e8f0f0;
     --text-dim: #7a9999;
-    --text-muted: #3d5555;
+    --text-muted: #6d8a8a;
     --border: rgba(18,104,105,0.2);
     --glow: rgba(18,104,105,0.4);
   }
@@ -282,12 +282,14 @@
   .footer-bottom { border-top: 1px solid var(--border); padding-top: 24px; }
   .footer-copy { font-size: 13px; color: var(--text-muted); }
 
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-  .animate-up { animation: fadeUp 0.8s ease forwards; }
-  .delay-1 { animation-delay: 0.1s; opacity: 0; }
-  .delay-2 { animation-delay: 0.2s; opacity: 0; }
-  .delay-3 { animation-delay: 0.3s; opacity: 0; }
-  .delay-4 { animation-delay: 0.4s; opacity: 0; }
+  @keyframes fadeUp { from { transform: translateY(16px); } to { transform: translateY(0); } }
+  @media (prefers-reduced-motion: no-preference) {
+    .animate-up { animation: fadeUp 0.6s ease both; }
+    .delay-1 { animation-delay: 0.05s; }
+    .delay-2 { animation-delay: 0.1s; }
+    .delay-3 { animation-delay: 0.15s; }
+    .delay-4 { animation-delay: 0.2s; }
+  }
 
   @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; padding: 120px 24px 60px; text-align: center; }
@@ -312,9 +314,9 @@
 </head>
 <body>
 
-<nav>
+<nav aria-label="Navigazione principale">
   <div class="nav-left">
-    <img src="assets/PKour Logo royal tea;.svg" alt="PKour" width="140" height="40" decoding="async">
+    <img src="assets/PKour Logo royal tea;.svg" alt="PKour" width="140" height="40" decoding="async" fetchpriority="low">
   </div>
   <div class="nav-right">
     <button class="lang-btn" id="langToggle" onclick="toggleLang()">EN</button>
@@ -325,6 +327,7 @@
   </div>
 </nav>
 
+<main id="main-content">
 <section class="hero">
   <div class="hero-content">
     <div class="hero-eyebrow animate-up delay-1" data-i18n="hero_eyebrow">Il tuo compagno di allenamento</div>
@@ -349,10 +352,16 @@
   <div class="hero-phone">
     <div class="phone-wrapper">
       <div class="phone-glow"></div>
-      <picture>
-        <source media="(max-width: 900px)" srcset="assets/screenshots/optimized/HOME-mobile.png" type="image/png">
-        <img src="assets/screenshots/optimized/HOME-640.png" alt="PKour app home screen" class="hero-screenshot" width="320" height="655" decoding="async" fetchpriority="high">
-      </picture>
+      <img
+        src="assets/screenshots/optimized/HOME-mobile.webp"
+        srcset="assets/screenshots/optimized/HOME-mobile.webp 520w, assets/screenshots/optimized/HOME-640.webp 640w"
+        sizes="(max-width: 900px) 320px, 320px"
+        alt="PKour app home screen"
+        class="hero-screenshot"
+        width="320"
+        height="655"
+        decoding="async"
+        fetchpriority="high">
     </div>
   </div>
 </section>
@@ -387,16 +396,16 @@
   <p class="section-sub" data-i18n="ss_sub">Un'interfaccia pensata per essere usata sul campo, sotto al sole, con le mani sporche.</p>
   <div class="screenshots-track">
     <div class="screenshot-phone">
-      <img src="assets/screenshots/optimized/MAP-mobile.png" srcset="assets/screenshots/optimized/MAP-mobile.png 520w, assets/screenshots/optimized/MAP-640.png 640w" sizes="260px" alt="PKour parkour spot map" width="260" height="531" loading="lazy" decoding="async">
+      <img src="assets/screenshots/optimized/MAP-mobile.webp" srcset="assets/screenshots/optimized/MAP-mobile.webp 520w, assets/screenshots/optimized/MAP-640.webp 640w" sizes="260px" alt="PKour parkour spot map" width="260" height="531" loading="lazy" decoding="async">
     </div>
     <div class="screenshot-phone">
-      <img src="assets/screenshots/optimized/tricks-mobile.png" srcset="assets/screenshots/optimized/tricks-mobile.png 520w, assets/screenshots/optimized/tricks-640.png 640w" sizes="260px" alt="PKour tricks encyclopedia" width="260" height="531" loading="lazy" decoding="async">
+      <img src="assets/screenshots/optimized/tricks-mobile.webp" srcset="assets/screenshots/optimized/tricks-mobile.webp 520w, assets/screenshots/optimized/tricks-640.webp 640w" sizes="260px" alt="PKour tricks encyclopedia" width="260" height="531" loading="lazy" decoding="async">
     </div>
     <div class="screenshot-phone">
-      <img src="assets/screenshots/optimized/video-track-mobile.png" srcset="assets/screenshots/optimized/video-track-mobile.png 520w, assets/screenshots/optimized/video-track-640.png 640w" sizes="260px" alt="PKour progress tracker" width="260" height="531" loading="lazy" decoding="async">
+      <img src="assets/screenshots/optimized/video-track-mobile.webp" srcset="assets/screenshots/optimized/video-track-mobile.webp 520w, assets/screenshots/optimized/video-track-640.webp 640w" sizes="260px" alt="PKour progress tracker" width="260" height="531" loading="lazy" decoding="async">
     </div>
     <div class="screenshot-phone">
-      <img src="assets/screenshots/optimized/profile-mobile.png" srcset="assets/screenshots/optimized/profile-mobile.png 520w, assets/screenshots/optimized/profile-640.png 640w" sizes="260px" alt="PKour athlete profile" width="260" height="531" loading="lazy" decoding="async">
+      <img src="assets/screenshots/optimized/profile-mobile.webp" srcset="assets/screenshots/optimized/profile-mobile.webp 520w, assets/screenshots/optimized/profile-640.webp 640w" sizes="260px" alt="PKour athlete profile" width="260" height="531" loading="lazy" decoding="async">
     </div>
   </div>
   <div class="carousel-dots">
@@ -432,6 +441,7 @@
     <p class="form-msg info" id="formMsg" data-i18n="form_note">Niente spam. Solo la notifica quando PKour è live.</p>
   </div>
 </section>
+</main>
 
 <footer>
   <div class="footer-container">
