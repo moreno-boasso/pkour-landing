@@ -4,7 +4,7 @@
 /.well-known/assetlinks.json
   Content-Type: application/json
 
-/assets/screenshots/optimized/*
+/assets/screenshots/*
   Cache-Control: public, max-age=31536000, immutable
 
 /assets/*
