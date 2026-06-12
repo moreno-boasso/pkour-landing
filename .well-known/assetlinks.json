@@ -1,11 +1,15 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls",
+      "delegate_permission/common.get_login_creds"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "pkour.it.pkour_fe",
       "sha256_cert_fingerprints": [
-        "04:B4:3A:68:93:56:41:40:F8:91:65:7F:E8:AC:C9:91:81:D1:24:28:8C:7E:28:22:04:67:F7:08:05:A6:B7:90"
+        "04:B4:3A:68:93:56:41:40:F8:91:65:7F:E8:AC:C9:91:81:D1:24:28:8C:7E:28:22:04:67:F7:08:05:A6:B7:90",
+        "6E:8D:81:3E:B2:14:BA:7F:08:4E:3E:AD:C0:32:74:11:C0:BE:65:B8:0E:E0:B7:13:AA:E5:40:D3:30:47:06:8B"
       ]
     }
   }
