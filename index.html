@@ -254,28 +254,7 @@
   .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 80px); letter-spacing: 3px; margin-bottom: 20px; }
   .cta-sub { font-size: 17px; color: var(--text-dim); max-width: 480px; margin: 0 auto 28px; line-height: 1.7; }
   .logo-placeholder-cta { width: 80px; height: 80px; background: var(--accent); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: white; margin: 0 auto 32px; box-shadow: 0 16px 48px var(--glow); }
-  .beta-countdown { max-width: 520px; margin: 0 auto 32px; padding: 20px 24px; border-radius: 16px; border: 1px solid rgba(26,154,156,0.35); background: rgba(18,104,105,0.1); }
-  .beta-countdown.is-expired { border-color: rgba(224,85,85,0.35); background: rgba(224,85,85,0.08); }
-  .beta-countdown-head { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
-  .beta-countdown-badge { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-bright); border: 1px solid rgba(26,154,156,0.45); background: rgba(18,104,105,0.18); padding: 5px 10px; border-radius: 6px; }
-  .beta-countdown-label { font-size: 14px; color: var(--text-dim); line-height: 1.4; }
-  .beta-countdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-  .beta-countdown-unit { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 8px; }
-  .beta-countdown-value { display: block; font-family: 'Bebas Neue', sans-serif; font-size: clamp(28px, 6vw, 40px); letter-spacing: 1px; color: var(--accent-bright); line-height: 1; margin-bottom: 4px; }
-  .beta-countdown-name { display: block; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
-  .beta-countdown-expired { display: none; font-size: 15px; color: #e88; font-weight: 600; line-height: 1.5; }
-  .beta-countdown.is-expired .beta-countdown-active { display: none; }
-  .beta-countdown.is-expired .beta-countdown-expired { display: block; }
-
-  /* FORM */
-  .email-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 520px; margin: 0 auto; }
-  .email-input { flex: 1; min-width: 220px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: border-color 0.2s; }
-  .email-input:focus { border-color: var(--accent-bright); }
-  .email-input::placeholder { color: var(--text-muted); }
-  .form-msg { margin-top: 14px; font-size: 13px; min-height: 20px; text-align: center; transition: all 0.3s; }
-  .form-msg.success { color: var(--accent-bright); }
-  .form-msg.error { color: #e05555; }
-  .form-msg.info { color: var(--text-dim); }
+  .cta-note { margin-top: 16px; font-size: 14px; color: var(--text-dim); line-height: 1.6; }
 
   /* FOOTER */
   footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 60px 80px 40px; }
@@ -336,7 +315,7 @@
   </div>
   <div class="nav-right">
     <button class="lang-btn" id="langToggle" onclick="toggleLang()">EN</button>
-    <a href="#download" class="nav-cta" title="Scarica l'app PKour" data-i18n-title="link_download">
+    <a href="https://docs.google.com/document/d/1Ep0Qy_GHCB2A1TZDL-6vNyyaoHM6rpxa5Cbxy6av8Dg/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="nav-cta" title="Scarica l'app PKour" data-i18n-title="link_download">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-right:6px;"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       DOWNLOAD
     </a>
@@ -354,7 +333,7 @@
     </h1>
     <p class="hero-desc animate-up delay-3" data-i18n="hero_desc">PKour è l'app per trovare parkour spot vicino a te, imparare tricks, tracciare i progressi e connetterti con la community parkour — tutto in un'unica piattaforma.</p>
     <div class="hero-actions animate-up delay-4">
-      <a href="#download" class="btn-primary" title="Scarica gratis l'app PKour" data-i18n-title="link_download_free">
+      <a href="https://docs.google.com/document/d/1Ep0Qy_GHCB2A1TZDL-6vNyyaoHM6rpxa5Cbxy6av8Dg/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-primary" title="Scarica gratis l'app PKour" data-i18n-title="link_download_free">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span data-i18n="hero_cta">Download Gratis</span>
       </a>
@@ -454,29 +433,12 @@
   <div class="cta-content">
     <img src="assets/icon white.svg" alt="PKour" width="80" height="80" style="margin-bottom:32px;" loading="lazy" decoding="async">
     <h2 class="cta-title" data-i18n="cta_title">Pronto a salire<br>di livello?</h2>
-    <p class="cta-sub" data-i18n="cta_sub">PKour è in sviluppo. Iscriviti alla beta Android e prova l'app prima di tutti.</p>
-    <div class="beta-countdown" id="betaCountdown" aria-live="polite">
-      <div class="beta-countdown-active">
-        <div class="beta-countdown-head">
-          <span class="beta-countdown-badge" data-i18n="beta_badge">Beta Android</span>
-          <span class="beta-countdown-label" data-i18n="beta_countdown_label">Le iscrizioni chiudono il 1 luglio</span>
-        </div>
-        <div class="beta-countdown-grid" role="timer">
-          <div class="beta-countdown-unit"><span class="beta-countdown-value" id="betaDays">00</span><span class="beta-countdown-name" data-i18n="beta_d">Giorni</span></div>
-          <div class="beta-countdown-unit"><span class="beta-countdown-value" id="betaHours">00</span><span class="beta-countdown-name" data-i18n="beta_h">Ore</span></div>
-          <div class="beta-countdown-unit"><span class="beta-countdown-value" id="betaMins">00</span><span class="beta-countdown-name" data-i18n="beta_m">Min</span></div>
-          <div class="beta-countdown-unit"><span class="beta-countdown-value" id="betaSecs">00</span><span class="beta-countdown-name" data-i18n="beta_s">Sec</span></div>
-        </div>
-      </div>
-      <p class="beta-countdown-expired" data-i18n="beta_expired">Le iscrizioni alla beta Android sono chiuse.</p>
-    </div>
-    <div class="email-form">
-      <input type="email" id="emailInput" class="email-input" placeholder="la-tua@email.com" data-i18n-ph="ep">
-      <button class="btn-primary" id="submitBtn" onclick="submitEmail()">
-        <span data-i18n="cta_btn">Avvisami</span>
-      </button>
-    </div>
-    <p class="form-msg info" id="formMsg" data-i18n="form_note">Niente spam. Solo la notifica quando PKour è live.</p>
+    <p class="cta-sub" data-i18n="cta_sub">La beta Android è aperta. Segui la guida per diventare tester e scaricare l'app.</p>
+    <a href="https://docs.google.com/document/d/1Ep0Qy_GHCB2A1TZDL-6vNyyaoHM6rpxa5Cbxy6av8Dg/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-primary" title="Guida per diventare tester PKour" data-i18n-title="link_beta_guide">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span data-i18n="cta_btn">Diventa tester</span>
+    </a>
+    <p class="cta-note" data-i18n="cta_note">Guida passo passo per scaricare la beta Android.</p>
   </div>
 </section>
 </main>
@@ -558,13 +520,9 @@ const T = {
     st1t:"Scarica e crea il profilo", st1d:"Registrati, inserisci il tuo livello e seleziona i trick che già conosci. PKour impara da te.",
     st2t:"Esplora l'enciclopedia", st2d:"Sfoglia centinaia di movimenti, guarda i tutorial, impara i prerequisiti e traccia i tuoi progressi con video personali.",
     st3t:"Vai allo spot", st3d:"Trova parkour spot vicini, vota e aggiungi nuovi spot. La community cresce insieme a te.",
-    cta_title:"Pronto a salire<br>di livello?", cta_sub:"PKour è in sviluppo. Iscriviti alla beta Android e prova l'app prima di tutti.",
-    beta_badge:"Beta Android", beta_countdown_label:"Le iscrizioni chiudono il 1 luglio",
-    beta_d:"Giorni", beta_h:"Ore", beta_m:"Min", beta_s:"Sec",
-    beta_expired:"Le iscrizioni alla beta Android sono chiuse.",
-    cta_btn:"Iscriviti alla Beta", ep:"la-tua@email.com",
-    form_note:"Niente spam. Solo accesso esclusivo alla beta testing.",
-    form_ok:"✓ Perfetto! Ti aggiungiamo alla beta testing.", form_err:"Qualcosa è andato storto. Riprova.", form_inv:"Inserisci un'email valida.", form_loading:"Iscrizione in corso…",
+    cta_title:"Pronto a salire<br>di livello?", cta_sub:"La beta Android è aperta. Segui la guida per diventare tester e scaricare l'app.",
+    cta_btn:"Diventa tester", cta_note:"Guida passo passo per scaricare la beta Android.",
+    link_beta_guide:"Guida per diventare tester PKour",
     footer_tagline:"L'app per trovare parkour spot e allenarti con la community.",
     footer_legal:"Legal", footer_privacy:"Privacy Policy", footer_terms:"Terms of Service", footer_delete:"Elimina account", footer_contact:"Contact",
     footer:"© 2026 PKour by Moreno Boasso.",
@@ -609,13 +567,9 @@ const T = {
     st1t:"Download & create profile", st1d:"Sign up, set your level and select the tricks you already know. PKour learns from you.",
     st2t:"Explore the encyclopedia", st2d:"Browse hundreds of movements, watch tutorials, learn prerequisites and track progress with personal videos.",
     st3t:"Go to the spot", st3d:"Find nearby parkour spots, rate and add new ones. The community grows together.",
-    cta_title:"Ready to level<br>up?", cta_sub:"PKour is in development. Join the Android beta and try the app before everyone else.",
-    beta_badge:"Android Beta", beta_countdown_label:"Sign-ups close on July 1",
-    beta_d:"Days", beta_h:"Hours", beta_m:"Min", beta_s:"Sec",
-    beta_expired:"Android beta sign-ups are now closed.",
-    cta_btn:"Join Beta", ep:"your@email.com",
-    form_note:"No spam. Just exclusive access to beta testing.",
-    form_ok:"✓ Perfect! We'll add you to the beta testing.", form_err:"Something went wrong. Please try again.", form_inv:"Please enter a valid email.", form_loading:"Signing up…",
+    cta_title:"Ready to level<br>up?", cta_sub:"The Android beta is open. Follow the guide to become a tester and download the app.",
+    cta_btn:"Become a tester", cta_note:"Step-by-step guide to download the Android beta.",
+    link_beta_guide:"PKour beta tester guide",
     footer_tagline:"The app to find parkour spots and train with the community.",
     footer_legal:"Legal", footer_privacy:"Privacy Policy", footer_terms:"Terms of Service", footer_delete:"Delete Account", footer_contact:"Contact",
     footer:"© 2026 PKour by Moreno Boasso.",
@@ -668,53 +622,6 @@ function toggleLang() {
   applyLang(lang === 'it' ? 'en' : 'it');
 }
 
-// ─── Android beta countdown (expires 1 Jul 2026, Europe/Rome) ─────────
-const BETA_ANDROID_DEADLINE_MS = Date.parse('2026-07-01T00:00:00+02:00');
-let betaCountdownTimer = null;
-
-function padCountdownUnit(value) {
-  return String(value).padStart(2, '0');
-}
-
-function setBetaCountdownValue(id, value) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = padCountdownUnit(value);
-}
-
-function updateBetaCountdown() {
-  const wrap = document.getElementById('betaCountdown');
-  if (!wrap) return;
-
-  const remainingMs = BETA_ANDROID_DEADLINE_MS - Date.now();
-  if (remainingMs <= 0) {
-    wrap.classList.add('is-expired');
-    if (betaCountdownTimer) {
-      clearInterval(betaCountdownTimer);
-      betaCountdownTimer = null;
-    }
-    return;
-  }
-
-  wrap.classList.remove('is-expired');
-  const totalSeconds = Math.floor(remainingMs / 1000);
-  const days = Math.floor(totalSeconds / 86400);
-  const hours = Math.floor((totalSeconds % 86400) / 3600);
-  const mins = Math.floor((totalSeconds % 3600) / 60);
-  const secs = totalSeconds % 60;
-
-  setBetaCountdownValue('betaDays', days);
-  setBetaCountdownValue('betaHours', hours);
-  setBetaCountdownValue('betaMins', mins);
-  setBetaCountdownValue('betaSecs', secs);
-}
-
-function initBetaCountdown() {
-  updateBetaCountdown();
-  if (!betaCountdownTimer) {
-    betaCountdownTimer = setInterval(updateBetaCountdown, 1000);
-  }
-}
-
 // ─── Carousel ─────────────────────────────────────────────────────────
 const track = document.querySelector('.screenshots-track');
 const dots = document.querySelectorAll('.carousel-dot');
@@ -750,75 +657,9 @@ function initCarousel() {
   });
 }
 
-// ─── Waitlist config ────────────────────────────────────────────────────
-const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwCffLed-NUtdg73hPKTT_QQIAz-TX2boc0sihf4BoPItcmQma-NTVbBx0Ma8ebFnqw/exec';
-
-// ─── Email Form ─────────────────────────────────────────────────────────
-async function submitEmail() {
-  const input = document.getElementById('emailInput');
-  const email = input.value.trim();
-  const msg = document.getElementById('formMsg');
-  const btn = document.getElementById('submitBtn');
-  
-  if (!email) {
-    msg.textContent = T[lang].form_inv;
-    msg.className = 'form-msg error';
-    return;
-  }
-  
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
-    msg.textContent = T[lang].form_inv;
-    msg.className = 'form-msg error';
-    return;
-  }
-  
-  btn.disabled = true;
-  msg.textContent = T[lang].form_loading;
-  msg.className = 'form-msg info';
-
-  const payload = {
-    email,
-    date: new Date().toISOString().split('T')[0],
-    lang: lang.toUpperCase(),
-    source: 'landing'
-  };
-
-  let sentToSheet = false;
-  try {
-    await fetch(GOOGLE_SHEET_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    sentToSheet = true;
-  } catch (error) {
-    console.warn('Waitlist submit failed', error);
-  }
-
-  try {
-    const local = JSON.parse(localStorage.getItem('pkour_waitlist') || '[]');
-    if (!local.find((row) => row.email === email)) {
-      local.push(payload);
-      localStorage.setItem('pkour_waitlist', JSON.stringify(local));
-    }
-  } catch (_) {}
-
-  msg.textContent = sentToSheet ? T[lang].form_ok : T[lang].form_err;
-  msg.className = sentToSheet ? 'form-msg success' : 'form-msg error';
-  btn.disabled = false;
-  if (sentToSheet) input.value = '';
-}
-
-document.getElementById('emailInput').addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') submitEmail();
-});
-
 // ─── Init ────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   applyLang(lang);
-  initBetaCountdown();
   if ('requestIdleCallback' in window) {
     requestIdleCallback(initCarousel, { timeout: 2000 });
   } else {
