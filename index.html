@@ -101,14 +101,29 @@
     pointer-events: none; z-index: 9999; opacity: 0.6;
   }
 
-  /* LANG BTN */
-  .lang-btn {
-    background: transparent; border: 1px solid var(--border);
-    color: var(--text-dim); padding: 6px 14px; border-radius: 6px;
-    font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px;
-    cursor: pointer; transition: all 0.2s;
+  /* LANG SELECT */
+  .lang-select {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 32px 8px 12px;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%237a9999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
   }
-  .lang-btn:hover { border-color: var(--accent-bright); color: var(--accent-bright); background: rgba(18,104,105,0.08); }
+  .lang-select:hover, .lang-select:focus {
+    border-color: var(--accent-bright);
+    outline: none;
+    background-color: rgba(18,104,105,0.08);
+  }
+  .lang-select option { font-size: 18px; background: var(--bg2); color: var(--text); }
 
   /* NAV */
   nav {
@@ -314,7 +329,10 @@
     <img src="assets/PKour Logo royal tea;.svg" alt="PKour" width="140" height="40" decoding="async" fetchpriority="low">
   </div>
   <div class="nav-right">
-    <button class="lang-btn" id="langToggle" onclick="toggleLang()">EN</button>
+    <select class="lang-select" id="langSelect" aria-label="Cambia lingua" onchange="applyLang(this.value)">
+      <option value="it">🇮🇹</option>
+      <option value="en">🇬🇧</option>
+    </select>
     <a href="download-beta.html" class="nav-cta" title="Scarica l'app PKour" data-i18n-title="link_download">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-right:6px;"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       DOWNLOAD
@@ -615,11 +633,8 @@ function applyLang(l) {
     const k = el.getAttribute('data-i18n-alt');
     if (t[k] !== undefined) el.alt = t[k];
   });
-  document.getElementById('langToggle').textContent = l === 'it' ? 'EN' : 'IT';
-}
-
-function toggleLang() {
-  applyLang(lang === 'it' ? 'en' : 'it');
+  const langSelect = document.getElementById('langSelect');
+  if (langSelect) langSelect.value = l;
 }
 
 // ─── Carousel ─────────────────────────────────────────────────────────

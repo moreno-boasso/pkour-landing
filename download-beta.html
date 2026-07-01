@@ -46,13 +46,28 @@
   }
   .nav-left img { display: block; height: 36px; width: auto; }
   .nav-right { display: flex; align-items: center; gap: 12px; }
-  .lang-btn {
-    background: transparent; border: 1px solid var(--border);
-    color: var(--text-dim); padding: 6px 14px; border-radius: 6px;
-    font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px;
-    cursor: pointer; transition: all 0.2s;
+  .lang-select {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 32px 8px 12px;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    transition: all 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%237a9999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
   }
-  .lang-btn:hover { border-color: var(--accent-bright); color: var(--accent-bright); }
+  .lang-select:hover, .lang-select:focus {
+    border-color: var(--accent-bright);
+    outline: none;
+    background-color: rgba(18,104,105,0.08);
+  }
+  .lang-select option { font-size: 18px; background: var(--bg2); color: var(--text); }
   .nav-link {
     color: var(--text-dim); text-decoration: none; font-size: 14px; transition: color 0.2s;
   }
@@ -151,7 +166,10 @@
     <img src="assets/PKour Logo royal tea;.svg" alt="PKour" width="120" height="34" decoding="async">
   </a>
   <div class="nav-right">
-    <button class="lang-btn" id="langToggle" onclick="toggleLang()">EN</button>
+    <select class="lang-select" id="langSelect" aria-label="Cambia lingua" onchange="applyLang(this.value)">
+      <option value="it">🇮🇹</option>
+      <option value="en">🇬🇧</option>
+    </select>
     <a href="index.html" class="nav-link" data-i18n="back_home">Home</a>
   </div>
 </nav>
@@ -261,11 +279,8 @@ function applyLang(l) {
     const k = el.getAttribute('data-i18n');
     if (t[k] !== undefined) el.innerHTML = t[k];
   });
-  document.getElementById('langToggle').textContent = l === 'it' ? 'EN' : 'IT';
-}
-
-function toggleLang() {
-  applyLang(lang === 'it' ? 'en' : 'it');
+  const langSelect = document.getElementById('langSelect');
+  if (langSelect) langSelect.value = l;
 }
 
 applyLang(lang);
