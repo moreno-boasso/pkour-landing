@@ -270,6 +270,14 @@
   .cta-sub { font-size: 17px; color: var(--text-dim); max-width: 480px; margin: 0 auto 28px; line-height: 1.7; }
   .logo-placeholder-cta { width: 80px; height: 80px; background: var(--accent); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: white; margin: 0 auto 32px; box-shadow: 0 16px 48px var(--glow); }
   .cta-note { margin-top: 16px; font-size: 14px; color: var(--text-dim); line-height: 1.6; }
+  .email-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 520px; margin: 0 auto; }
+  .email-input { flex: 1; min-width: 220px; background: var(--bg2); border: 1px solid var(--border); border-radius: 10px; padding: 16px 20px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; outline: none; transition: border-color 0.2s; }
+  .email-input:focus { border-color: var(--accent-bright); }
+  .email-input::placeholder { color: var(--text-muted); }
+  .form-msg { margin-top: 14px; font-size: 13px; min-height: 20px; text-align: center; transition: all 0.3s; }
+  .form-msg.success { color: var(--accent-bright); }
+  .form-msg.error { color: #e05555; }
+  .form-msg.info { color: var(--text-dim); }
 
   /* FOOTER */
   footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 60px 80px 40px; }
@@ -333,7 +341,7 @@
       <option value="it">🇮🇹</option>
       <option value="en">🇬🇧</option>
     </select>
-    <a href="download-beta.html" class="nav-cta" title="Scarica l'app PKour" data-i18n-title="link_download">
+    <a href="#download" class="nav-cta" title="Scarica l'app PKour" data-i18n-title="link_download">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-right:6px;"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       DOWNLOAD
     </a>
@@ -351,7 +359,7 @@
     </h1>
     <p class="hero-desc animate-up delay-3" data-i18n="hero_desc">PKour è l'app per trovare parkour spot vicino a te, imparare tricks, tracciare i progressi e connetterti con la community parkour — tutto in un'unica piattaforma.</p>
     <div class="hero-actions animate-up delay-4">
-      <a href="download-beta.html" class="btn-primary" title="Scarica gratis l'app PKour" data-i18n-title="link_download_free">
+      <a href="#download" class="btn-primary" title="Scarica gratis l'app PKour" data-i18n-title="link_download_free">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span data-i18n="hero_cta">Download Gratis</span>
       </a>
@@ -451,12 +459,14 @@
   <div class="cta-content">
     <img src="assets/icon white.svg" alt="PKour" width="80" height="80" style="margin-bottom:32px;" loading="lazy" decoding="async">
     <h2 class="cta-title" data-i18n="cta_title">Pronto a salire<br>di livello?</h2>
-    <p class="cta-sub" data-i18n="cta_sub">La beta Android è aperta. Segui la guida per diventare tester e scaricare l'app.</p>
-    <a href="download-beta.html" class="btn-primary" title="Guida per diventare tester PKour" data-i18n-title="link_beta_guide">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <span data-i18n="cta_btn">Diventa tester</span>
-    </a>
-    <p class="cta-note" data-i18n="cta_note">Guida passo passo per scaricare la beta Android.</p>
+    <p class="cta-sub" data-i18n="cta_sub">Iscriviti alla beta Android: lascia la tua email e ti contattiamo noi.</p>
+    <div class="email-form">
+      <input type="email" id="emailInput" class="email-input" placeholder="la-tua@email.com" data-i18n-ph="ep" autocomplete="email">
+      <button type="button" class="btn-primary" id="submitBtn" onclick="submitEmail()">
+        <span data-i18n="cta_btn">Iscriviti alla Beta</span>
+      </button>
+    </div>
+    <p class="form-msg info" id="formMsg" data-i18n="form_note">Niente spam. Solo accesso alla beta testing.</p>
   </div>
 </section>
 </main>
@@ -538,9 +548,10 @@ const T = {
     st1t:"Scarica e crea il profilo", st1d:"Registrati, inserisci il tuo livello e seleziona i trick che già conosci. PKour impara da te.",
     st2t:"Esplora l'enciclopedia", st2d:"Sfoglia centinaia di movimenti, guarda i tutorial, impara i prerequisiti e traccia i tuoi progressi con video personali.",
     st3t:"Vai allo spot", st3d:"Trova parkour spot vicini, vota e aggiungi nuovi spot. La community cresce insieme a te.",
-    cta_title:"Pronto a salire<br>di livello?", cta_sub:"La beta Android è aperta. Segui la guida per diventare tester e scaricare l'app.",
-    cta_btn:"Diventa tester", cta_note:"Guida passo passo per scaricare la beta Android.",
-    link_beta_guide:"Guida per diventare tester PKour",
+    cta_title:"Pronto a salire<br>di livello?", cta_sub:"Iscriviti alla beta Android: lascia la tua email e ti contattiamo noi.",
+    cta_btn:"Iscriviti alla Beta", ep:"la-tua@email.com",
+    form_note:"Niente spam. Solo accesso alla beta testing.",
+    form_ok:"✓ Perfetto! Ti aggiungiamo alla waitlist.", form_err:"Qualcosa è andato storto. Riprova.", form_inv:"Inserisci un'email valida.", form_loading:"Iscrizione in corso…",
     footer_tagline:"L'app per trovare parkour spot e allenarti con la community.",
     footer_legal:"Legal", footer_privacy:"Privacy Policy", footer_terms:"Terms of Service", footer_delete:"Elimina account", footer_contact:"Contact",
     footer:"© 2026 PKour by Moreno Boasso.",
@@ -585,9 +596,10 @@ const T = {
     st1t:"Download & create profile", st1d:"Sign up, set your level and select the tricks you already know. PKour learns from you.",
     st2t:"Explore the encyclopedia", st2d:"Browse hundreds of movements, watch tutorials, learn prerequisites and track progress with personal videos.",
     st3t:"Go to the spot", st3d:"Find nearby parkour spots, rate and add new ones. The community grows together.",
-    cta_title:"Ready to level<br>up?", cta_sub:"The Android beta is open. Follow the guide to become a tester and download the app.",
-    cta_btn:"Become a tester", cta_note:"Step-by-step guide to download the Android beta.",
-    link_beta_guide:"PKour beta tester guide",
+    cta_title:"Ready to level<br>up?", cta_sub:"Join the Android beta: leave your email and we'll get in touch.",
+    cta_btn:"Join Beta", ep:"your@email.com",
+    form_note:"No spam. Beta access only.",
+    form_ok:"✓ Done! You're on the waitlist.", form_err:"Something went wrong. Please try again.", form_inv:"Please enter a valid email.", form_loading:"Signing up…",
     footer_tagline:"The app to find parkour spots and train with the community.",
     footer_legal:"Legal", footer_privacy:"Privacy Policy", footer_terms:"Terms of Service", footer_delete:"Delete Account", footer_contact:"Contact",
     footer:"© 2026 PKour by Moreno Boasso.",
@@ -635,7 +647,76 @@ function applyLang(l) {
   });
   const langSelect = document.getElementById('langSelect');
   if (langSelect) langSelect.value = l;
+  const formMsg = document.getElementById('formMsg');
+  if (formMsg && !formMsg.classList.contains('success') && !formMsg.classList.contains('error')) {
+    formMsg.textContent = t.form_note;
+    formMsg.className = 'form-msg info';
+  }
 }
+
+// ─── Waitlist ───────────────────────────────────────────────────────────
+const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbwCffLed-NUtdg73hPKTT_QQIAz-TX2boc0sihf4BoPItcmQma-NTVbBx0Ma8ebFnqw/exec';
+
+async function submitEmail() {
+  const input = document.getElementById('emailInput');
+  const email = input.value.trim();
+  const msg = document.getElementById('formMsg');
+  const btn = document.getElementById('submitBtn');
+
+  if (!email) {
+    msg.textContent = T[lang].form_inv;
+    msg.className = 'form-msg error';
+    return;
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    msg.textContent = T[lang].form_inv;
+    msg.className = 'form-msg error';
+    return;
+  }
+
+  btn.disabled = true;
+  msg.textContent = T[lang].form_loading;
+  msg.className = 'form-msg info';
+
+  const payload = {
+    email,
+    date: new Date().toISOString().split('T')[0],
+    lang: lang.toUpperCase(),
+    source: 'landing'
+  };
+
+  let sentToSheet = false;
+  try {
+    await fetch(GOOGLE_SHEET_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    sentToSheet = true;
+  } catch (error) {
+    console.warn('Waitlist submit failed', error);
+  }
+
+  try {
+    const local = JSON.parse(localStorage.getItem('pkour_waitlist') || '[]');
+    if (!local.find((row) => row.email === email)) {
+      local.push(payload);
+      localStorage.setItem('pkour_waitlist', JSON.stringify(local));
+    }
+  } catch (_) {}
+
+  msg.textContent = sentToSheet ? T[lang].form_ok : T[lang].form_err;
+  msg.className = sentToSheet ? 'form-msg success' : 'form-msg error';
+  btn.disabled = false;
+  if (sentToSheet) input.value = '';
+}
+
+document.getElementById('emailInput').addEventListener('keydown', (event) => {
+  if (event.key === 'Enter') submitEmail();
+});
 
 // ─── Carousel ─────────────────────────────────────────────────────────
 const track = document.querySelector('.screenshots-track');

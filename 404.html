@@ -176,8 +176,8 @@ const API_BASE = 'https://pkour-be-513506522652.europe-west1.run.app/api';
 // TODO(store-release): impostare true e aggiornare gli URL quando l'app è live.
 // Vedi STORE_RELEASE_TODO.md nella root del monorepo.
 const STORES_PUBLISHED = false;
-const APP_STORE_URL = 'https://pkour.it/download-beta.html';
-const PLAY_STORE_URL = 'https://pkour.it/download-beta.html';
+const APP_STORE_URL = 'https://pkour.it/#download';
+const PLAY_STORE_URL = 'https://pkour.it/#download';
 
 const STRINGS = {
   it: {
@@ -186,13 +186,13 @@ const STRINGS = {
     open_app: 'Apri in PKour',
     download_ios: 'Scarica su App Store',
     download_android: 'Scarica su Google Play',
-    coming_soon: 'Diventa tester — guida beta',
+    coming_soon: 'Iscriviti alla beta',
     spot_desc: 'Scopri questo spot sulla mappa PKour.',
     trick_desc: 'Studia questo trick nell\'enciclopedia PKour.',
     not_found: 'Contenuto non trovato.',
     invalid_link: 'Link non valido.',
     post_install_hint: 'Dopo aver installato l\'app e fatto login, riapri questo link per aprire il contenuto.',
-    post_install_hint_no_store: 'PKour non è ancora sugli store. Se hai una build di test installata, tocca "Apri in PKour". Altrimenti segui la guida beta per scaricare l\'app.',
+    post_install_hint_no_store: 'PKour non è ancora sugli store. Se hai una build di test installata, tocca "Apri in PKour". Altrimenti iscriviti alla beta dalla homepage.',
     loading: 'Caricamento...'
   },
   en: {
@@ -201,13 +201,13 @@ const STRINGS = {
     open_app: 'Open in PKour',
     download_ios: 'Download on the App Store',
     download_android: 'Get it on Google Play',
-    coming_soon: 'Become a tester — beta guide',
+    coming_soon: 'Join the beta',
     spot_desc: 'Discover this spot on the PKour map.',
     trick_desc: 'Study this trick in the PKour encyclopedia.',
     not_found: 'Content not found.',
     invalid_link: 'Invalid link.',
     post_install_hint: 'After installing the app and signing in, open this link again to view the content.',
-    post_install_hint_no_store: 'PKour is not on the stores yet. If you have a test build installed, tap "Open in PKour". Otherwise follow the beta guide to download the app.',
+    post_install_hint_no_store: 'PKour is not on the stores yet. If you have a test build installed, tap "Open in PKour". Otherwise join the beta waitlist on our homepage.',
     loading: 'Loading...'
   }
 };
@@ -271,7 +271,7 @@ function imageFromData(type, data) {
 function renderError(message) {
   const t = lang();
   const storeLabel = STORES_PUBLISHED ? t.download_ios : t.coming_soon;
-  const storeUrl = STORES_PUBLISHED ? APP_STORE_URL : 'https://pkour.it/download-beta.html';
+  const storeUrl = STORES_PUBLISHED ? APP_STORE_URL : 'https://pkour.it/#download';
   document.getElementById('card').innerHTML = `
     <div class="content">
       <p class="error">${message}</p>
@@ -292,7 +292,7 @@ function renderPreview(type, id, data) {
   const isAndroid = /Android/i.test(navigator.userAgent);
   const storeUrl = STORES_PUBLISHED
     ? (isAndroid ? PLAY_STORE_URL : APP_STORE_URL)
-    : 'https://pkour.it/download-beta.html';
+    : 'https://pkour.it/#download';
   const storeLabel = STORES_PUBLISHED
     ? (isAndroid ? t.download_android : t.download_ios)
     : t.coming_soon;
