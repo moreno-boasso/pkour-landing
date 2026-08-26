@@ -268,6 +268,12 @@
   .cta-content { position: relative; z-index: 1; }
   .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 80px); letter-spacing: 3px; margin-bottom: 20px; }
   .cta-sub { font-size: 17px; color: var(--text-dim); max-width: 480px; margin: 0 auto 28px; line-height: 1.7; }
+  .countdown-wrap { margin: 0 auto 28px; max-width: 480px; }
+  .countdown-caption { font-size: 17px; color: var(--text-dim); line-height: 1.5; margin: 0 0 16px; }
+  .countdown { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .countdown-unit { min-width: 72px; padding: 12px 10px; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; }
+  .countdown-value { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 1px; line-height: 1; color: var(--text); }
+  .countdown-label { display: block; margin-top: 6px; font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-dim); }
   .logo-placeholder-cta { width: 80px; height: 80px; background: var(--accent); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-family: 'Bebas Neue', sans-serif; font-size: 36px; color: white; margin: 0 auto 32px; box-shadow: 0 16px 48px var(--glow); }
   .cta-note { margin-top: 16px; font-size: 14px; color: var(--text-dim); line-height: 1.6; }
   .email-form { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 520px; margin: 0 auto; }
@@ -278,6 +284,43 @@
   .form-msg.success { color: var(--accent-bright); }
   .form-msg.error { color: #e05555; }
   .form-msg.info { color: var(--text-dim); }
+  .store-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; max-width: 420px; margin: 0 auto; }
+  .store-badge {
+    display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+    box-sizing: border-box;
+    width: 200px; height: 64px; padding: 0 16px;
+    background: #000; color: #fff;
+    border: 1px solid rgba(255,255,255,0.28); border-radius: 10px;
+    text-decoration: none; line-height: 1.05;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+  .store-badge:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.55);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.35);
+  }
+  .store-badge-icon-wrap {
+    width: 36px; height: 36px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .store-badge-icon { display: block; object-fit: contain; }
+  .store-badge-icon--apple { width: 26px; height: 32px; filter: brightness(0) invert(1); }
+  .store-badge-icon--android { width: 34px; height: 20px; }
+  .store-badge-text { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; min-width: 0; }
+  .store-badge-eyebrow {
+    font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.92;
+    white-space: nowrap;
+  }
+  .store-badge-name {
+    font-family: 'DM Sans', sans-serif; font-size: 18px; font-weight: 600;
+    letter-spacing: -0.02em; margin-top: 2px;
+    white-space: nowrap;
+  }
+  @media (max-width: 480px) {
+    .store-buttons { width: 100%; max-width: 280px; flex-direction: column; align-items: stretch; }
+    .store-badge { width: 100%; }
+  }
 
   /* FOOTER */
   footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 60px 80px 40px; }
@@ -341,7 +384,7 @@
       <option value="it">🇮🇹</option>
       <option value="en">🇬🇧</option>
     </select>
-    <a href="#download" class="nav-cta" title="Scarica l'app PKour" data-i18n-title="link_download">
+    <a href="#download" class="nav-cta download-cta" title="Scarica l'app PKour" data-i18n-title="link_download">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" style="margin-right:6px;"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       DOWNLOAD
     </a>
@@ -359,7 +402,7 @@
     </h1>
     <p class="hero-desc animate-up delay-3" data-i18n="hero_desc">PKour è l'app per trovare parkour spot vicino a te, imparare tricks, tracciare i progressi e connetterti con la community parkour — tutto in un'unica piattaforma.</p>
     <div class="hero-actions animate-up delay-4">
-      <a href="#download" class="btn-primary" title="Scarica gratis l'app PKour" data-i18n-title="link_download_free">
+      <a href="#download" class="btn-primary download-cta" title="Scarica gratis l'app PKour" data-i18n-title="link_download_free">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <span data-i18n="hero_cta">Download Gratis</span>
       </a>
@@ -459,14 +502,59 @@
   <div class="cta-content">
     <img src="assets/icon white.svg" alt="PKour" width="80" height="80" style="margin-bottom:32px;" loading="lazy" decoding="async">
     <h2 class="cta-title" data-i18n="cta_title">Pronto a salire<br>di livello?</h2>
-    <p class="cta-sub" data-i18n="cta_sub">Iscriviti alla beta Android: lascia la tua email e ti contattiamo noi.</p>
-    <div class="email-form">
-      <input type="email" id="emailInput" class="email-input" placeholder="la-tua@email.com" data-i18n-ph="ep" autocomplete="email">
-      <button type="button" class="btn-primary" id="submitBtn" onclick="submitEmail()">
-        <span data-i18n="cta_btn">Iscriviti alla Beta</span>
-      </button>
+    <p class="cta-sub" id="ctaSub" hidden data-i18n="cta_sub_live">Scarica PKour su iOS e Android.</p>
+    <div class="countdown-wrap" id="ctaCountdown" aria-live="polite">
+      <p class="countdown-caption" data-i18n="cd_caption">Uscita dell'app su iOS e Android tra</p>
+      <div class="countdown">
+        <div class="countdown-unit">
+          <span class="countdown-value" id="cdDays">00</span>
+          <span class="countdown-label" data-i18n="cd_days">giorni</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-value" id="cdHours">00</span>
+          <span class="countdown-label" data-i18n="cd_hours">ore</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-value" id="cdMins">00</span>
+          <span class="countdown-label" data-i18n="cd_mins">min</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-value" id="cdSecs">00</span>
+          <span class="countdown-label" data-i18n="cd_secs">sec</span>
+        </div>
+      </div>
     </div>
-    <p class="form-msg info" id="formMsg" data-i18n="form_note">Niente spam. Solo accesso alla beta testing.</p>
+    <div id="preLaunchCta">
+      <div class="email-form">
+        <input type="email" id="emailInput" class="email-input" placeholder="la-tua@email.com" data-i18n-ph="ep" autocomplete="email">
+        <button type="button" class="btn-primary" id="submitBtn" onclick="submitEmail()">
+          <span data-i18n="cta_btn">Avvisami all'uscita</span>
+        </button>
+      </div>
+      <p class="form-msg info" id="formMsg" data-i18n="form_note">Niente spam. Solo un avviso quando PKour è disponibile.</p>
+    </div>
+    <div id="postLaunchCta" hidden>
+      <div class="store-buttons">
+        <a id="appStoreBtn" class="store-badge" href="#" target="_blank" rel="noopener noreferrer" title="Scarica su App Store" data-i18n-title="download_ios" aria-label="Download on the App Store">
+          <span class="store-badge-icon-wrap">
+            <img src="assets/apple-logo.svg" alt="" class="store-badge-icon store-badge-icon--apple" width="28" height="34" loading="lazy" decoding="async">
+          </span>
+          <span class="store-badge-text">
+            <span class="store-badge-eyebrow">Download on the</span>
+            <span class="store-badge-name">App Store</span>
+          </span>
+        </a>
+        <a id="playStoreBtn" class="store-badge" href="#" target="_blank" rel="noopener noreferrer" title="Scarica su Google Play" data-i18n-title="download_android" aria-label="Get it on Google Play">
+          <span class="store-badge-icon-wrap">
+            <img src="assets/android-logo.svg" alt="" class="store-badge-icon store-badge-icon--android" width="34" height="20" loading="lazy" decoding="async">
+          </span>
+          <span class="store-badge-text">
+            <span class="store-badge-eyebrow">Get it on</span>
+            <span class="store-badge-name">Google Play</span>
+          </span>
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 </main>
@@ -548,10 +636,14 @@ const T = {
     st1t:"Scarica e crea il profilo", st1d:"Registrati, inserisci il tuo livello e seleziona i trick che già conosci. PKour impara da te.",
     st2t:"Esplora l'enciclopedia", st2d:"Sfoglia centinaia di movimenti, guarda i tutorial, impara i prerequisiti e traccia i tuoi progressi con video personali.",
     st3t:"Vai allo spot", st3d:"Trova parkour spot vicini, vota e aggiungi nuovi spot. La community cresce insieme a te.",
-    cta_title:"Pronto a salire<br>di livello?", cta_sub:"Iscriviti alla beta Android: lascia la tua email e ti contattiamo noi.",
-    cta_btn:"Iscriviti alla Beta", ep:"la-tua@email.com",
-    form_note:"Niente spam. Solo accesso alla beta testing.",
-    form_ok:"✓ Perfetto! Ti aggiungiamo alla waitlist.", form_err:"Qualcosa è andato storto. Riprova.", form_inv:"Inserisci un'email valida.", form_loading:"Iscrizione in corso…",
+    cta_title:"Pronto a salire<br>di livello?",
+    cta_sub_live:"Scarica PKour su iOS e Android.",
+    cta_btn:"Avvisami all'uscita", ep:"la-tua@email.com",
+    form_note:"Niente spam. Solo un avviso quando PKour è disponibile.",
+    form_ok:"✓ Perfetto! Ti avviseremo all'uscita.", form_err:"Qualcosa è andato storto. Riprova.", form_inv:"Inserisci un'email valida.", form_loading:"Iscrizione in corso…",
+    download_ios:"Scarica su App Store", download_android:"Scarica su Google Play",
+    cd_caption:"Uscita dell'app su iOS e Android tra",
+    cd_days:"giorni", cd_hours:"ore", cd_mins:"min", cd_secs:"sec",
     footer_tagline:"L'app per trovare parkour spot e allenarti con la community.",
     footer_legal:"Legal", footer_privacy:"Privacy Policy", footer_terms:"Terms of Service", footer_delete:"Elimina account", footer_contact:"Contact",
     footer:"© 2026 PKour by Moreno Boasso.",
@@ -596,10 +688,14 @@ const T = {
     st1t:"Download & create profile", st1d:"Sign up, set your level and select the tricks you already know. PKour learns from you.",
     st2t:"Explore the encyclopedia", st2d:"Browse hundreds of movements, watch tutorials, learn prerequisites and track progress with personal videos.",
     st3t:"Go to the spot", st3d:"Find nearby parkour spots, rate and add new ones. The community grows together.",
-    cta_title:"Ready to level<br>up?", cta_sub:"Join the Android beta: leave your email and we'll get in touch.",
-    cta_btn:"Join Beta", ep:"your@email.com",
-    form_note:"No spam. Beta access only.",
-    form_ok:"✓ Done! You're on the waitlist.", form_err:"Something went wrong. Please try again.", form_inv:"Please enter a valid email.", form_loading:"Signing up…",
+    cta_title:"Ready to level<br>up?",
+    cta_sub_live:"Download PKour on iOS and Android.",
+    cta_btn:"Notify me at launch", ep:"your@email.com",
+    form_note:"No spam. Just a heads-up when PKour is available.",
+    form_ok:"✓ Done! We'll notify you at launch.", form_err:"Something went wrong. Please try again.", form_inv:"Please enter a valid email.", form_loading:"Signing up…",
+    download_ios:"Download on the App Store", download_android:"Get it on Google Play",
+    cd_caption:"App launch on iOS and Android in",
+    cd_days:"days", cd_hours:"hrs", cd_mins:"min", cd_secs:"sec",
     footer_tagline:"The app to find parkour spots and train with the community.",
     footer_legal:"Legal", footer_privacy:"Privacy Policy", footer_terms:"Terms of Service", footer_delete:"Delete Account", footer_contact:"Contact",
     footer:"© 2026 PKour by Moreno Boasso.",
@@ -611,6 +707,99 @@ const T = {
 // Detect browser locale
 const browserLang = (navigator.language || 'en').toLowerCase();
 let lang = browserLang.startsWith('it') ? 'it' : 'en';
+
+// ─── Store launch gate ───────────────────────────────────────────────────
+// Metti true per previeware i pulsanti store prima del 1 settembre.
+const FORCE_STORE_BUTTONS = false;
+
+// TODO(store-release): sostituire con URL reali App Store / Google Play.
+const APP_STORE_URL = 'https://pkour.it/#download';
+const PLAY_STORE_URL = 'https://pkour.it/#download';
+const LAUNCH_AT = new Date('2026-09-01T14:00:00+02:00');
+
+let storesLive = FORCE_STORE_BUTTONS || Date.now() >= LAUNCH_AT.getTime();
+let countdownTimer = null;
+
+function isIOSDevice() {
+  const ua = navigator.userAgent || '';
+  return /iPhone|iPad|iPod/i.test(ua) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
+
+function isAndroidDevice() {
+  return /Android/i.test(navigator.userAgent || '');
+}
+
+function getPreferredStoreUrl() {
+  if (isIOSDevice()) return APP_STORE_URL;
+  if (isAndroidDevice()) return PLAY_STORE_URL;
+  return '#download';
+}
+
+function wireDownloadCtas() {
+  document.querySelectorAll('.download-cta').forEach((el) => {
+    if (storesLive) {
+      const url = getPreferredStoreUrl();
+      el.href = url;
+      if (url.startsWith('http')) {
+        el.target = '_blank';
+        el.rel = 'noopener noreferrer';
+      } else {
+        el.removeAttribute('target');
+        el.removeAttribute('rel');
+      }
+    } else {
+      el.href = '#download';
+      el.removeAttribute('target');
+      el.removeAttribute('rel');
+    }
+  });
+}
+
+function pad2(n) {
+  return String(n).padStart(2, '0');
+}
+
+function updateCountdown() {
+  const countdown = document.getElementById('ctaCountdown');
+  if (!countdown || countdown.hidden) return;
+
+  const remaining = LAUNCH_AT.getTime() - Date.now();
+  if (remaining <= 0) {
+    if (!storesLive) {
+      storesLive = true;
+      applyStoreCta();
+      applyLang(lang);
+    }
+    if (countdownTimer) {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+    }
+    return;
+  }
+
+  const totalSec = Math.floor(remaining / 1000);
+  const days = Math.floor(totalSec / 86400);
+  const hours = Math.floor((totalSec % 86400) / 3600);
+  const mins = Math.floor((totalSec % 3600) / 60);
+  const secs = totalSec % 60;
+
+  const daysEl = document.getElementById('cdDays');
+  const hoursEl = document.getElementById('cdHours');
+  const minsEl = document.getElementById('cdMins');
+  const secsEl = document.getElementById('cdSecs');
+  if (daysEl) daysEl.textContent = pad2(days);
+  if (hoursEl) hoursEl.textContent = pad2(hours);
+  if (minsEl) minsEl.textContent = pad2(mins);
+  if (secsEl) secsEl.textContent = pad2(secs);
+}
+
+function startCountdown() {
+  if (storesLive) return;
+  updateCountdown();
+  if (countdownTimer) clearInterval(countdownTimer);
+  countdownTimer = setInterval(updateCountdown, 1000);
+}
 
 function applyLang(l) {
   lang = l;
@@ -652,6 +841,35 @@ function applyLang(l) {
     formMsg.textContent = t.form_note;
     formMsg.className = 'form-msg info';
   }
+}
+
+function applyStoreCta() {
+  const pre = document.getElementById('preLaunchCta');
+  const post = document.getElementById('postLaunchCta');
+  const countdown = document.getElementById('ctaCountdown');
+  const ctaSub = document.getElementById('ctaSub');
+  const appStoreBtn = document.getElementById('appStoreBtn');
+  const playStoreBtn = document.getElementById('playStoreBtn');
+  if (!pre || !post) return;
+
+  if (storesLive) {
+    pre.hidden = true;
+    post.hidden = false;
+    if (countdown) countdown.hidden = true;
+    if (ctaSub) ctaSub.hidden = false;
+    if (appStoreBtn) appStoreBtn.href = APP_STORE_URL;
+    if (playStoreBtn) playStoreBtn.href = PLAY_STORE_URL;
+    if (countdownTimer) {
+      clearInterval(countdownTimer);
+      countdownTimer = null;
+    }
+  } else {
+    pre.hidden = false;
+    post.hidden = true;
+    if (countdown) countdown.hidden = false;
+    if (ctaSub) ctaSub.hidden = true;
+  }
+  wireDownloadCtas();
 }
 
 // ─── Waitlist ───────────────────────────────────────────────────────────
@@ -714,9 +932,12 @@ async function submitEmail() {
   if (sentToSheet) input.value = '';
 }
 
-document.getElementById('emailInput').addEventListener('keydown', (event) => {
-  if (event.key === 'Enter') submitEmail();
-});
+const emailInput = document.getElementById('emailInput');
+if (emailInput) {
+  emailInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') submitEmail();
+  });
+}
 
 // ─── Carousel ─────────────────────────────────────────────────────────
 const track = document.querySelector('.screenshots-track');
@@ -755,7 +976,9 @@ function initCarousel() {
 
 // ─── Init ────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  applyStoreCta();
   applyLang(lang);
+  startCountdown();
   if ('requestIdleCallback' in window) {
     requestIdleCallback(initCarousel, { timeout: 2000 });
   } else {
