@@ -712,9 +712,8 @@ let lang = browserLang.startsWith('it') ? 'it' : 'en';
 // Metti true per previeware i pulsanti store prima del 1 settembre.
 const FORCE_STORE_BUTTONS = false;
 
-// TODO(store-release): sostituire con URL reali App Store / Google Play.
-const APP_STORE_URL = 'https://pkour.it/#download';
-const PLAY_STORE_URL = 'https://pkour.it/#download';
+const APP_STORE_URL = 'https://apps.apple.com/us/app/pkour/id6778014567';
+const PLAY_STORE_URL = 'https://play.google.com/store/apps/details?id=pkour.it.pkour_fe';
 const LAUNCH_AT = new Date('2026-09-01T14:00:00+02:00');
 
 let storesLive = FORCE_STORE_BUTTONS || Date.now() >= LAUNCH_AT.getTime();
